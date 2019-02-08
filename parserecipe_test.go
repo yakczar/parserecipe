@@ -1,6 +1,7 @@
 package parserecipe
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,18 +23,21 @@ func TestParse(t *testing.T) {
 }
 
 func TestGetIngredientsInString(t *testing.T) {
-	line := "1/2 cup oil (vegetable or canola oil)"
-	wp := GetIngredientsInString(line)
-	assert.Equal(t, "oil", wp[0].Word)
-	assert.Equal(t, 1, len(wp))
+	line := SanitizeLine("1/2 cup chilled oil (vegetable or canola oil)")
+	wpi := GetIngredientsInString(line)
+	assert.Equal(t, "oil", wpi[0].Word)
+	assert.Equal(t, 1, len(wpi))
+	fmt.Println(wpi)
 
-	wp = GetNumbersInString(line)
+	wp := GetNumbersInString(line)
 	assert.Equal(t, 1, len(wp))
-	assert.Equal(t, "1/2", wp[0].Word)
+	assert.Equal(t, "½", wp[0].Word)
 
-	wp = GetMeasuresInString(line)
-	assert.Equal(t, 1, len(wp))
-	assert.Equal(t, "cup", wp[0].Word)
+	wpm := GetMeasuresInString(line)
+	assert.Equal(t, 1, len(wpm))
+	assert.Equal(t, "cup", wpm[0].Word)
+
+	fmt.Println(GetOtherInBetweenPositions(line, wpm[0], wpi[0]))
 }
 
 func TestTopHat(t *testing.T) {

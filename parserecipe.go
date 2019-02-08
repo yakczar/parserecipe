@@ -29,13 +29,6 @@ type WordPosition struct {
 }
 
 func getWordPositions(s string, corpus []string) (wordPositions []WordPosition) {
-	s = " " + s + " "
-	// remove parentheses
-	re := regexp.MustCompile(`(?s)\((.*)\)`)
-	for _, m := range re.FindAllStringSubmatch(s, -1) {
-		s = strings.Replace(s, m[0], " ", 1)
-	}
-
 	wordPositions = []WordPosition{}
 	for _, ing := range corpus {
 		pos := strings.Index(s, ing)
@@ -45,6 +38,17 @@ func getWordPositions(s string, corpus []string) (wordPositions []WordPosition) 
 			wordPositions = append(wordPositions, WordPosition{ing, pos})
 		}
 	}
+	return
+}
+
+func GetOtherInBetweenPositions(s string, pos1, pos2 WordPosition) (other string) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Error(r)
+		}
+	}()
+	other = s[pos1.Position+len(pos1.Word)+1 : pos2.Position]
+	other = strings.TrimSpace(other)
 	return
 }
 
@@ -62,6 +66,12 @@ func GetMeasuresInString(s string) (wordPositions []WordPosition) {
 
 func SanitizeLine(s string) string {
 	s = strings.ToLower(s)
+
+	// remove parentheses
+	re := regexp.MustCompile(`(?s)\((.*)\)`)
+	for _, m := range re.FindAllStringSubmatch(s, -1) {
+		s = strings.Replace(s, m[0], " ", 1)
+	}
 
 	s = " " + strings.TrimSpace(s) + " "
 	reg, _ := regexp.Compile("[^a-zA-Z0-9/]+")
@@ -94,6 +104,7 @@ type Ingredient struct {
 	MeasureConverted  Measure `json:",omitempty"`
 	MeasureNormalized Measure `json:",omitempty"`
 	Name              string  `json:",omitempty"`
+	Note              string  `json:",omitempty"`
 }
 
 type Measure struct {
@@ -199,9 +210,13 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 				"line": strings.TrimSpace(lineInfo.LineOriginal),
 			}).Errorf("%s", err.Error())
 		}
+		if len(lineInfo.MeasureInString) > 0 && len(lineInfo.IngredientsInString) > 0 {
+			lineInfo.Ingredient.Note = GetOtherInBetweenPositions(lineInfo.Line, lineInfo.MeasureInString[0], lineInfo.IngredientsInString[0])
+		}
 		log.WithFields(logrus.Fields{
 			"line": strings.TrimSpace(lineInfo.LineOriginal),
-		}).Debugf("%s: %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.MeasureOriginal)
+		}).Debugf("%s (%s): %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.Note, lineInfo.Ingredient.MeasureOriginal)
+
 		parsed.Lines = append(parsed.Lines, lineInfo)
 	}
 
