@@ -8,7 +8,7 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	assert.Nil(t, Parse("testing/sites/chocolatecake.html"))
+	assert.Nil(t, Parse("testing/sites/lasagna.html"))
 }
 
 func TestGetIngredientsInString(t *testing.T) {
@@ -24,6 +24,11 @@ func TestGetIngredientsInString(t *testing.T) {
 	wp = GetMeasuresInString(line)
 	assert.Equal(t, 1, len(wp))
 	assert.Equal(t, "cup", wp[0].Word)
+
+	line = "* 3/4 pound mozzarella cheese, sliced"
+	fmt.Println(SanitizeLine(line))
+	wp = GetIngredientsInString(SanitizeLine(line))
+	fmt.Println(wp)
 }
 
 func TestTopHat(t *testing.T) {

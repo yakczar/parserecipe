@@ -668,12 +668,14 @@ peaches
 goat cheese
 ice
 kidney beans
+mozzarella cheese
 can cream of chicken soup
 chicken thighs
 tofu
 corn tortillas
 chickpeas
 vegetable broth
+lasagna noodles
 celery seed
 shallot
 clove
@@ -714,4 +716,6 @@ var corpusMeasuresMap = map[string]string{
 	"quarts":      "quart",
 	"pound":       "pound",
 	"pounds":      "pound",
+	"cans":        "can",
+	"can":         "can",
 }

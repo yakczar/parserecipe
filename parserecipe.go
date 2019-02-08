@@ -61,12 +61,22 @@ func GetMeasuresInString(s string) (wordPositions []WordPosition) {
 
 func SanitizeLine(s string) string {
 	s = strings.ToLower(s)
+
 	s = " " + strings.TrimSpace(s) + " "
+	reg, _ := regexp.Compile("[^a-zA-Z0-9/]+")
+	s = reg.ReplaceAllString(s, " ")
+	for v := range corpusFractionNumberMap {
+		s = strings.Replace(s, corpusFractionNumberMap[v].fractionString, v, -1)
+	}
+
 	s = strings.Replace(s, " one ", " 1 ", -1)
+	s = strings.Replace(s, " egg ", " eggs ", -1)
+
 	return s
 }
 
 type LineInfo struct {
+	LineOriginal        string
 	Line                string         `json:",omitempty"`
 	IngredientsInString []WordPosition `json:",omitempty"`
 	AmountInString      []WordPosition `json:",omitempty"`
@@ -110,18 +120,12 @@ func Parse(txtFile string) (err error) {
 		return
 	}
 
-	for v := range corpusFractionNumberMap {
-		txtFileData = strings.Replace(txtFileData, corpusFractionNumberMap[v].fractionString, v, -1)
-	}
 	lines := strings.Split(strings.ToLower(txtFileData), "\n")
 	scores := make([]int, len(lines))
-
-	for i, line := range lines {
-		lines[i] = SanitizeLine(line)
-	}
-
 	lineInfos := make([]LineInfo, len(lines))
 	for i, line := range lines {
+		lineInfos[i].LineOriginal = line
+		line = SanitizeLine(line)
 		lineInfos[i].Line = line
 		lineInfos[i].IngredientsInString = GetIngredientsInString(line)
 		lineInfos[i].AmountInString = GetNumbersInString(line)
@@ -161,25 +165,25 @@ func Parse(txtFile string) (err error) {
 		err := lineInfo.getTotalAmount()
 		if err != nil {
 			log.WithFields(logrus.Fields{
-				"line": strings.TrimSpace(lineInfo.Line),
+				"line": strings.TrimSpace(lineInfo.LineOriginal),
 			}).Errorf("%s", err.Error())
 			continue
 		}
 		err = lineInfo.getIngredient()
 		if err != nil {
 			log.WithFields(logrus.Fields{
-				"line": strings.TrimSpace(lineInfo.Line),
+				"line": strings.TrimSpace(lineInfo.LineOriginal),
 			}).Errorf("%s", err.Error())
 			continue
 		}
 		err = lineInfo.getMeasure()
 		if err != nil {
 			log.WithFields(logrus.Fields{
-				"line": strings.TrimSpace(lineInfo.Line),
+				"line": strings.TrimSpace(lineInfo.LineOriginal),
 			}).Errorf("%s", err.Error())
 		}
 		log.WithFields(logrus.Fields{
-			"line": strings.TrimSpace(lineInfo.Line),
+			"line": strings.TrimSpace(lineInfo.LineOriginal),
 		}).Infof("%s: %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.MeasureOriginal)
 	}
 	return
