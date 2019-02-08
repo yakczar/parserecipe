@@ -9,10 +9,10 @@ import (
 
 func TestParse(t *testing.T) {
 	files := []string{
-		"testing/sites/lasagna.html",
-		"testing/sites/chocolatecake.html",
-		"testing/sites/macandcheese.html",
-		"testing/sites/granola-recipe-1939521",
+		// "testing/sites/lasagna.html",
+		// "testing/sites/chocolatecake.html",
+		// "testing/sites/macandcheese.html",
+		// "testing/sites/granola-recipe-1939521",
 		"testing/sites/hawaiian-burgers-3611160",
 	}
 	for _, f := range files {
@@ -42,7 +42,7 @@ func TestGetIngredientsInString(t *testing.T) {
 }
 
 func TestTopHat(t *testing.T) {
-	vector := []int{0, 0, 0, 1, 0, 1, 1, 0, 0, 5, 4, 2, 6, 4, 1, 0, 0, 0, 4, 0, 0}
+	vector := []float64{0, 0, 0, 1, 0, 1, 1, 0, 0, 5, 4, 2, 6, 4, 1, 0, 0, 0, 4, 0, 0}
 	s, e := GetBestTopHatPositions(vector)
 	assert.Equal(t, 9, s)
 	assert.Equal(t, 14, e)

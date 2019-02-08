@@ -111,6 +111,36 @@ type Measure struct {
 	Name   string
 }
 
+func ParseDirections(lis []LineInfo) (rerr error) {
+	log.Debug(len(lis))
+	scores := make([]float64, len(lis))
+	for i, li := range lis {
+		if i > 30 {
+			break
+		}
+		if len(strings.TrimSpace(li.Line)) < 3 {
+			continue
+		}
+		score := 0.0
+		for _, corpusDirection := range corpusDirections {
+			if strings.Contains(li.Line, corpusDirection) {
+				score++
+			}
+		}
+		if len(li.Line) < 5 {
+			score = 0
+		}
+		scores[i] = score
+	}
+
+	start, end := GetBestTopHatPositions(scores)
+	log.Debugf("direction are from line %d to %d", start, end)
+	for i := start; i <= end; i++ {
+		log.Debug(lis[i].Line)
+	}
+	return
+}
+
 // Parse looks for the following
 // - Contains number
 // - Contains mass/volume
@@ -129,10 +159,9 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 	if rerr != nil {
 		return
 	}
-	// ioutil.WriteFile("out", []byte(txtFileData), 0644)
 
 	lines := strings.Split(strings.ToLower(txtFileData), "\n")
-	scores := make([]int, len(lines))
+	scores := make([]float64, len(lines))
 	lineInfos := make([]LineInfo, len(lines))
 	i := -1
 	for _, line := range lines {
@@ -147,7 +176,7 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 		lineInfos[i].AmountInString = GetNumbersInString(line)
 		lineInfos[i].MeasureInString = GetMeasuresInString(line)
 
-		score := 0
+		score := 0.0
 		if len(lineInfos[i].IngredientsInString) > 0 {
 			score++
 		}
@@ -174,7 +203,7 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 			score++
 		}
 		if score == 1 {
-			score = 0
+			score = 0.0
 		}
 		// log.Debugf("'%s' (%d)", line, score)
 		scores[i] = score
@@ -182,8 +211,16 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 	scores = scores[:i+1]
 	lineInfos = lineInfos[:i+1]
 
+	lines = make([]string, len(lineInfos))
+	for i, li := range lineInfos {
+		lines[i] = li.Line
+	}
+	ioutil.WriteFile("out", []byte(strings.Join(lines, "\n")), 0644)
+
 	start, end := GetBestTopHatPositions(scores)
-	log.Debug(start, end)
+
+	ParseDirections(lineInfos[end:])
+
 	parsed = Parsed{[]LineInfo{}}
 	for _, lineInfo := range lineInfos[start-3 : end+3] {
 		if len(strings.TrimSpace(lineInfo.Line)) < 3 {
@@ -273,11 +310,7 @@ func (lineInfo *LineInfo) getMeasure() (err error) {
 	return
 }
 
-func GetBestTopHatPositions(vector []int) (start, end int) {
-	vectorFloat := make([]float64, len(vector))
-	for i, v := range vector {
-		vectorFloat[i] = float64(v)
-	}
+func GetBestTopHatPositions(vectorFloat []float64) (start, end int) {
 
 	bestTopHatResidual := 1e9
 	for i, v := range vectorFloat {
