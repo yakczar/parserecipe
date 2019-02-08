@@ -1,0 +1,758 @@
+{
+ "Lines": [
+  {
+   "LineOriginal": "* 1 pound sweet italian sausage",
+   "Line": " 1 pound sweet italian sausage ",
+   "IngredientsInString": [
+    {
+     "Word": "sausage",
+     "Position": 23
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "1",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "pound",
+     "Position": 3
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 1,
+     "Name": "pound"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "sausage"
+   }
+  },
+  {
+   "LineOriginal": "* 3/4 pound lean ground beef",
+   "Line": " ¾ pound lean ground beef ",
+   "IngredientsInString": [
+    {
+     "Word": "beef",
+     "Position": 22
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "¾",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "pound",
+     "Position": 4
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 0.75,
+     "Name": "pound"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "beef"
+   }
+  },
+  {
+   "LineOriginal": "* 1/2 cup minced onion",
+   "Line": " ½ cup minced onion ",
+   "IngredientsInString": [
+    {
+     "Word": "onion",
+     "Position": 15
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "½",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "cup",
+     "Position": 4
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 0.5,
+     "Name": "cup"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "onion"
+   }
+  },
+  {
+   "LineOriginal": "* 2 cloves garlic, crushed",
+   "Line": " 2 cloves garlic crushed ",
+   "IngredientsInString": [
+    {
+     "Word": "cloves",
+     "Position": 3
+    },
+    {
+     "Word": "garlic",
+     "Position": 3
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "2",
+     "Position": 1
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 2,
+     "Name": "whole"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "cloves"
+   }
+  },
+  {
+   "LineOriginal": "* 1 (28 ounce) can crushed tomatoes",
+   "Line": " 1 28 ounce can crushed tomatoes ",
+   "IngredientsInString": [
+    {
+     "Word": "tomatoes",
+     "Position": 24
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "1",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "ounce",
+     "Position": 6
+    },
+    {
+     "Word": "can",
+     "Position": 6
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 1,
+     "Name": "ounce"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "tomatoes"
+   }
+  },
+  {
+   "LineOriginal": "* 2 (6 ounce) cans tomato paste",
+   "Line": " 2 6 ounce cans tomato paste ",
+   "IngredientsInString": [
+    {
+     "Word": "tomato paste",
+     "Position": 16
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "2",
+     "Position": 1
+    },
+    {
+     "Word": "6",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "ounce",
+     "Position": 5
+    },
+    {
+     "Word": "cans",
+     "Position": 5
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 8,
+     "Name": "ounce"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "tomato paste"
+   }
+  },
+  {
+   "LineOriginal": "* 2 (6.5 ounce) cans canned tomato sauce",
+   "Line": " 2 6 5 ounce cans canned tomato sauce ",
+   "IngredientsInString": [
+    {
+     "Word": "tomato sauce",
+     "Position": 25
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "2",
+     "Position": 1
+    },
+    {
+     "Word": "5",
+     "Position": 3
+    },
+    {
+     "Word": "6",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "ounce",
+     "Position": 7
+    },
+    {
+     "Word": "cans",
+     "Position": 7
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 2,
+     "Name": "ounce"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "tomato sauce"
+   }
+  },
+  {
+   "LineOriginal": "* 1/2 cup water",
+   "Line": " ½ cup water ",
+   "IngredientsInString": [
+    {
+     "Word": "water",
+     "Position": 8
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "½",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "cup",
+     "Position": 4
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 0.5,
+     "Name": "cup"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "water"
+   }
+  },
+  {
+   "LineOriginal": "* 2 tablespoons white sugar",
+   "Line": " 2 tablespoons white sugar ",
+   "IngredientsInString": [
+    {
+     "Word": "sugar",
+     "Position": 21
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "2",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "tablespoons",
+     "Position": 3
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 2,
+     "Name": "tablespoons"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "sugar"
+   }
+  },
+  {
+   "LineOriginal": "* 1 1/2 teaspoons dried basil leaves",
+   "Line": " 1 ½ teaspoons dried basil leaves ",
+   "IngredientsInString": [
+    {
+     "Word": "basil leaves",
+     "Position": 22
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "1",
+     "Position": 1
+    },
+    {
+     "Word": "½",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "teaspoons",
+     "Position": 6
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 1.5,
+     "Name": "teaspoons"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "basil leaves"
+   }
+  },
+  {
+   "LineOriginal": "* 1/2 teaspoon fennel seeds",
+   "Line": " ½ teaspoon fennel seeds ",
+   "IngredientsInString": [
+    {
+     "Word": "fennel",
+     "Position": 13
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "½",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "teaspoon",
+     "Position": 4
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 0.5,
+     "Name": "teaspoon"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "fennel"
+   }
+  },
+  {
+   "LineOriginal": "* 1 teaspoon italian seasoning",
+   "Line": " 1 teaspoon italian seasoning ",
+   "IngredientsInString": [
+    {
+     "Word": "italian seasoning",
+     "Position": 12
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "1",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "teaspoon",
+     "Position": 3
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 1,
+     "Name": "teaspoon"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "italian seasoning"
+   }
+  },
+  {
+   "LineOriginal": "* 1 tablespoon salt",
+   "Line": " 1 tablespoon salt ",
+   "IngredientsInString": [
+    {
+     "Word": "salt",
+     "Position": 14
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "1",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "tablespoon",
+     "Position": 3
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 1,
+     "Name": "tablespoon"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "salt"
+   }
+  },
+  {
+   "LineOriginal": "* 1/4 teaspoon ground black pepper",
+   "Line": " ¼ teaspoon ground black pepper ",
+   "IngredientsInString": [
+    {
+     "Word": "black pepper",
+     "Position": 20
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "¼",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "teaspoon",
+     "Position": 4
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 0.25,
+     "Name": "teaspoon"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "black pepper"
+   }
+  },
+  {
+   "LineOriginal": "* 4 tablespoons chopped fresh parsley",
+   "Line": " 4 tablespoons chopped fresh parsley ",
+   "IngredientsInString": [
+    {
+     "Word": "parsley",
+     "Position": 29
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "4",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "tablespoons",
+     "Position": 3
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 4,
+     "Name": "tablespoons"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "parsley"
+   }
+  },
+  {
+   "LineOriginal": "* 12 lasagna noodles",
+   "Line": " 12 lasagna noodles ",
+   "IngredientsInString": [
+    {
+     "Word": "lasagna noodles",
+     "Position": 4
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "12",
+     "Position": 1
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 12,
+     "Name": "whole"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "lasagna noodles"
+   }
+  },
+  {
+   "LineOriginal": "* 16 ounces ricotta cheese",
+   "Line": " 16 ounces ricotta cheese ",
+   "IngredientsInString": [
+    {
+     "Word": "ricotta cheese",
+     "Position": 11
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "16",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "ounces",
+     "Position": 4
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 16,
+     "Name": "ounces"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "ricotta cheese"
+   }
+  },
+  {
+   "LineOriginal": "* 1 egg",
+   "Line": " 1 eggs ",
+   "IngredientsInString": [
+    {
+     "Word": "eggs",
+     "Position": 3
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "1",
+     "Position": 1
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 1,
+     "Name": "whole"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "eggs"
+   }
+  },
+  {
+   "LineOriginal": "* 1/2 teaspoon salt",
+   "Line": " ½ teaspoon salt ",
+   "IngredientsInString": [
+    {
+     "Word": "salt",
+     "Position": 13
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "½",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "teaspoon",
+     "Position": 4
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 0.5,
+     "Name": "teaspoon"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "salt"
+   }
+  },
+  {
+   "LineOriginal": "* 3/4 pound mozzarella cheese, sliced",
+   "Line": " ¾ pound mozzarella cheese sliced ",
+   "IngredientsInString": [
+    {
+     "Word": "mozzarella cheese",
+     "Position": 10
+    }
+   ],
+   "AmountInString": [
+    {
+     "Word": "¾",
+     "Position": 1
+    }
+   ],
+   "MeasureInString": [
+    {
+     "Word": "pound",
+     "Position": 4
+    }
+   ],
+   "Ingredient": {
+    "MeasureOriginal": {
+     "Amount": 0.75,
+     "Name": "pound"
+    },
+    "MeasureConverted": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "MeasureNormalized": {
+     "Amount": 0,
+     "Name": ""
+    },
+    "Name": "mozzarella cheese"
+   }
+  }
+ ]
+}
