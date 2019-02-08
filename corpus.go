@@ -684,6 +684,8 @@ spaghetti
 lemon peel
 black peppercorns
 half and half
+cashews
+raisins
 onion
 yellow cake mix
 banana`, "\n")

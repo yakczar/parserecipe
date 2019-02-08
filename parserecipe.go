@@ -124,7 +124,12 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 	lines := strings.Split(strings.ToLower(txtFileData), "\n")
 	scores := make([]int, len(lines))
 	lineInfos := make([]LineInfo, len(lines))
-	for i, line := range lines {
+	i := -1
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		i++
 		lineInfos[i].LineOriginal = line
 		line = SanitizeLine(line)
 		lineInfos[i].Line = line
@@ -164,11 +169,13 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 		// log.Debugf("'%s' (%d)", line, score)
 		scores[i] = score
 	}
+	scores = scores[:i+1]
+	lineInfos = lineInfos[:i+1]
 
 	start, end := GetBestTopHatPositions(scores)
 	log.Debug(start, end)
 	parsed = Parsed{[]LineInfo{}}
-	for _, lineInfo := range lineInfos[start:end] {
+	for _, lineInfo := range lineInfos[start-3 : end+3] {
 		if len(strings.TrimSpace(lineInfo.Line)) < 3 {
 			continue
 		}
