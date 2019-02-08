@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// func TestParse(t *testing.T) {
-// 	assert.Nil(t, Parse("testing/sites/chocolatecake.txt"))
-// }
+func TestParse(t *testing.T) {
+	assert.Nil(t, Parse("testing/sites/chocolatecake.html"))
+}
 
 func TestGetIngredientsInString(t *testing.T) {
 	line := "1/2 cup oil (vegetable or canola oil)"

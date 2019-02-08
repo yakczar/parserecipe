@@ -6,6 +6,8 @@ import (
 	"math"
 	"regexp"
 	"strings"
+
+	"github.com/jaytaylor/html2text"
 )
 
 type WordPosition struct {
@@ -59,7 +61,10 @@ func Parse(txtFile string) (err error) {
 	if err != nil {
 		return
 	}
-	txtFileData := string(bFile)
+	txtFileData, err := html2text.FromString(string(bFile), html2text.Options{PrettyTables: false, OmitLinks: true})
+	if err != nil {
+		return
+	}
 	txtFileData = strings.Replace(txtFileData, "1/2", "½", -1)
 	txtFileData = strings.Replace(txtFileData, "1/4", "¼", -1)
 	txtFileData = strings.Replace(txtFileData, "3/4", "¾", -1)
@@ -75,8 +80,6 @@ func Parse(txtFile string) (err error) {
 		// sanitize string
 		line = strings.Replace(line, " one ", " 1 ", -1)
 
-		fmt.Println("-")
-		fmt.Printf("'%s'\n", line)
 		ingInString := GetIngredientsInString(line)
 		numInString := GetNumbersInString(line)
 		measureInString := GetMeasuresInString(line)
@@ -105,11 +108,12 @@ func Parse(txtFile string) (err error) {
 			score++
 		}
 		scores[i] = score
-		fmt.Println(ingInString, numInString, measureInString, score)
-		fmt.Println("-")
-
 	}
-	fmt.Println(scores)
+
+	start, end := GetBestTopHatPositions(scores)
+	for _, line := range lines[start:end] {
+		fmt.Println(line)
+	}
 	return
 }
 
