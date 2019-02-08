@@ -9,7 +9,18 @@ import (
 	"strings"
 
 	"github.com/jaytaylor/html2text"
+	colorable "github.com/mattn/go-colorable"
+	"github.com/sirupsen/logrus"
 )
+
+// Create a new instance of the logger. You can have any number of instances.
+var log = logrus.New()
+
+func init() {
+	log.SetFormatter(&logrus.TextFormatter{ForceColors: true})
+	log.SetOutput(colorable.NewColorableStdout())
+	log.SetLevel(logrus.DebugLevel)
+}
 
 type WordPosition struct {
 	Word     string
@@ -55,6 +66,31 @@ func SanitizeLine(s string) string {
 	return s
 }
 
+type LineInfo struct {
+	Line                string         `json:",omitempty"`
+	IngredientsInString []WordPosition `json:",omitempty"`
+	AmountInString      []WordPosition `json:",omitempty"`
+	MeasureInString     []WordPosition `json:",omitempty"`
+	Ingredient          Ingredient     `json:",omitempty"`
+}
+
+// func (lineInfo LineInfo) String() string {
+// 	j, _ := json.Marshal(lineInfo)
+// 	return string(j)
+// }
+
+type Ingredient struct {
+	MeasureOriginal   Measure `json:",omitempty"`
+	MeasureConverted  Measure `json:",omitempty"`
+	MeasureNormalized Measure `json:",omitempty"`
+	Name              string  `json:",omitempty"`
+}
+
+type Measure struct {
+	Amount float64
+	Name   string
+}
+
 // Parse looks for the following
 // - Contains number
 // - Contains mass/volume
@@ -73,15 +109,10 @@ func Parse(txtFile string) (err error) {
 	if err != nil {
 		return
 	}
-	txtFileData = strings.Replace(txtFileData, "1/2", "½", -1)
-	txtFileData = strings.Replace(txtFileData, "1/4", "¼", -1)
-	txtFileData = strings.Replace(txtFileData, "3/4", "¾", -1)
-	txtFileData = strings.Replace(txtFileData, "1/8", "⅛", -1)
-	txtFileData = strings.Replace(txtFileData, "3/8", "⅜", -1)
-	txtFileData = strings.Replace(txtFileData, "5/8", "⅝", -1)
-	txtFileData = strings.Replace(txtFileData, "7/8", "⅞", -1)
-	txtFileData = strings.Replace(txtFileData, "2/3", "⅔", -1)
-	txtFileData = strings.Replace(txtFileData, "1/3", "⅓", -1)
+
+	for v := range corpusFractionNumberMap {
+		txtFileData = strings.Replace(txtFileData, corpusFractionNumberMap[v].fractionString, v, -1)
+	}
 	lines := strings.Split(strings.ToLower(txtFileData), "\n")
 	scores := make([]int, len(lines))
 
@@ -89,37 +120,30 @@ func Parse(txtFile string) (err error) {
 		lines[i] = SanitizeLine(line)
 	}
 
-	type lineInfo struct {
-		line                string
-		ingredientsInString []WordPosition
-		amountInString      []WordPosition
-		measureInString     []WordPosition
-	}
-
-	lineInfos := make([]lineInfo, len(lines))
+	lineInfos := make([]LineInfo, len(lines))
 	for i, line := range lines {
-		lineInfos[i].line = line
-		lineInfos[i].ingredientsInString = GetIngredientsInString(line)
-		lineInfos[i].amountInString = GetNumbersInString(line)
-		lineInfos[i].measureInString = GetMeasuresInString(line)
+		lineInfos[i].Line = line
+		lineInfos[i].IngredientsInString = GetIngredientsInString(line)
+		lineInfos[i].AmountInString = GetNumbersInString(line)
+		lineInfos[i].MeasureInString = GetMeasuresInString(line)
 
 		score := 0
-		if len(lineInfos[i].ingredientsInString) > 0 {
+		if len(lineInfos[i].IngredientsInString) > 0 {
 			score++
 		}
-		if len(lineInfos[i].amountInString) > 0 {
+		if len(lineInfos[i].AmountInString) > 0 {
 			score++
 		}
-		if len(lineInfos[i].measureInString) > 0 {
+		if len(lineInfos[i].MeasureInString) > 0 {
 			score++
 		}
-		if len(lineInfos[i].ingredientsInString) > 0 && len(lineInfos[i].measureInString) > 0 && lineInfos[i].ingredientsInString[0].Position > lineInfos[i].measureInString[0].Position {
+		if len(lineInfos[i].IngredientsInString) > 0 && len(lineInfos[i].MeasureInString) > 0 && lineInfos[i].IngredientsInString[0].Position > lineInfos[i].MeasureInString[0].Position {
 			score++
 		}
-		if len(lineInfos[i].ingredientsInString) > 0 && len(lineInfos[i].amountInString) > 0 && lineInfos[i].ingredientsInString[0].Position > lineInfos[i].amountInString[0].Position {
+		if len(lineInfos[i].IngredientsInString) > 0 && len(lineInfos[i].AmountInString) > 0 && lineInfos[i].IngredientsInString[0].Position > lineInfos[i].AmountInString[0].Position {
 			score++
 		}
-		if len(lineInfos[i].measureInString) > 0 && len(lineInfos[i].amountInString) > 0 && lineInfos[i].measureInString[0].Position > lineInfos[i].amountInString[0].Position {
+		if len(lineInfos[i].MeasureInString) > 0 && len(lineInfos[i].AmountInString) > 0 && lineInfos[i].MeasureInString[0].Position > lineInfos[i].AmountInString[0].Position {
 			score++
 		}
 		fields := strings.Fields(line)
@@ -131,14 +155,40 @@ func Parse(txtFile string) (err error) {
 
 	start, end := GetBestTopHatPositions(scores)
 	for _, lineInfo := range lineInfos[start:end] {
-		fmt.Println(lineInfo, getTotalAmount(lineInfo.amountInString))
+		if len(strings.TrimSpace(lineInfo.Line)) < 3 {
+			continue
+		}
+		err := lineInfo.getTotalAmount()
+		if err != nil {
+			log.WithFields(logrus.Fields{
+				"line": strings.TrimSpace(lineInfo.Line),
+			}).Errorf("%s", err.Error())
+			continue
+		}
+		err = lineInfo.getIngredient()
+		if err != nil {
+			log.WithFields(logrus.Fields{
+				"line": strings.TrimSpace(lineInfo.Line),
+			}).Errorf("%s", err.Error())
+			continue
+		}
+		err = lineInfo.getMeasure()
+		if err != nil {
+			log.WithFields(logrus.Fields{
+				"line": strings.TrimSpace(lineInfo.Line),
+			}).Errorf("%s", err.Error())
+		}
+		log.WithFields(logrus.Fields{
+			"line": strings.TrimSpace(lineInfo.Line),
+		}).Infof("%s: %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.MeasureOriginal)
 	}
 	return
 }
 
-func getTotalAmount(wps []WordPosition) float64 {
+func (lineInfo *LineInfo) getTotalAmount() (err error) {
 	lastPosition := -1
 	totalAmount := 0.0
+	wps := lineInfo.AmountInString
 	for i := range wps {
 		wps[i].Word = strings.TrimSpace(wps[i].Word)
 		if lastPosition == -1 {
@@ -148,7 +198,33 @@ func getTotalAmount(wps []WordPosition) float64 {
 		}
 		lastPosition = wps[i].Position
 	}
-	return totalAmount
+	if totalAmount == 0 && strings.Contains(lineInfo.Line, "whole") {
+		totalAmount = 1
+	}
+	if totalAmount == 0 {
+		err = fmt.Errorf("no amount found")
+	} else {
+		lineInfo.Ingredient.MeasureOriginal.Amount = totalAmount
+	}
+	return
+}
+
+func (lineInfo *LineInfo) getIngredient() (err error) {
+	if len(lineInfo.IngredientsInString) == 0 {
+		err = fmt.Errorf("no ingredient found")
+		return
+	}
+	lineInfo.Ingredient.Name = lineInfo.IngredientsInString[0].Word
+	return
+}
+
+func (lineInfo *LineInfo) getMeasure() (err error) {
+	if len(lineInfo.MeasureInString) == 0 {
+		lineInfo.Ingredient.MeasureOriginal.Name = "whole"
+		return
+	}
+	lineInfo.Ingredient.MeasureOriginal.Name = lineInfo.MeasureInString[0].Word
+	return
 }
 
 func GetBestTopHatPositions(vector []int) (start, end int) {

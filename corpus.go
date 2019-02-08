@@ -32,6 +32,10 @@ func init() {
 		i++
 	}
 
+	for v := range corpusFractionNumberMap {
+		corpusNumbers = append(corpusNumbers, v)
+	}
+
 	// make sure each is flanked by space
 	for i, c := range corpusMeasures {
 		corpusMeasures[i] = " " + strings.TrimSpace(c) + " "
@@ -89,16 +93,24 @@ var corpusNumbers = strings.Split(`1/2
 17
 18
 19
-20
-½
-¼
-¾
-⅛
-⅜
-⅝
-⅞
-⅔
-⅓`, "\n")
+20`, "\n")
+
+type fractionNumber struct {
+	fractionString string
+	value          float64
+}
+
+var corpusFractionNumberMap = map[string]fractionNumber{
+	"½": fractionNumber{"1/2", 1.0 / 2},
+	"¼": fractionNumber{"1/4", 1.0 / 4},
+	"¾": fractionNumber{"3/4", 3.0 / 4},
+	"⅛": fractionNumber{"1/8", 1.0 / 8},
+	"⅜": fractionNumber{"3/8", 3.0 / 8},
+	"⅝": fractionNumber{"5/8", 5.0 / 8},
+	"⅞": fractionNumber{"7/8", 7.0 / 8},
+	"⅔": fractionNumber{"2/3", 2.0 / 3},
+	"⅓": fractionNumber{"1/3", 1.0 / 3},
+}
 
 var corpusIngredients = strings.Split(`salt
 sugar
