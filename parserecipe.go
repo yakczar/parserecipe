@@ -86,28 +86,35 @@ func Parse(txtFile string) (err error) {
 		lines[i] = SanitizeLine(line)
 	}
 
+	type lineInfo struct {
+		ingredientsInString []WordPosition
+		numInString         []WordPosition
+		measureInString     []WordPosition
+	}
+
+	lineInfos := make([]lineInfo, len(lines))
 	for i, line := range lines {
-		ingInString := GetIngredientsInString(line)
-		numInString := GetNumbersInString(line)
-		measureInString := GetMeasuresInString(line)
+		lineInfos[i].ingredientsInString = GetIngredientsInString(line)
+		lineInfos[i].numInString = GetNumbersInString(line)
+		lineInfos[i].measureInString = GetMeasuresInString(line)
 
 		score := 0
-		if len(ingInString) > 0 {
+		if len(lineInfos[i].ingredientsInString) > 0 {
 			score++
 		}
-		if len(numInString) > 0 {
+		if len(lineInfos[i].numInString) > 0 {
 			score++
 		}
-		if len(measureInString) > 0 {
+		if len(lineInfos[i].measureInString) > 0 {
 			score++
 		}
-		if len(ingInString) > 0 && len(measureInString) > 0 && ingInString[0].Position > measureInString[0].Position {
+		if len(lineInfos[i].ingredientsInString) > 0 && len(lineInfos[i].measureInString) > 0 && lineInfos[i].ingredientsInString[0].Position > lineInfos[i].measureInString[0].Position {
 			score++
 		}
-		if len(ingInString) > 0 && len(numInString) > 0 && ingInString[0].Position > numInString[0].Position {
+		if len(lineInfos[i].ingredientsInString) > 0 && len(lineInfos[i].numInString) > 0 && lineInfos[i].ingredientsInString[0].Position > lineInfos[i].numInString[0].Position {
 			score++
 		}
-		if len(measureInString) > 0 && len(numInString) > 0 && measureInString[0].Position > numInString[0].Position {
+		if len(lineInfos[i].measureInString) > 0 && len(lineInfos[i].numInString) > 0 && lineInfos[i].measureInString[0].Position > lineInfos[i].numInString[0].Position {
 			score++
 		}
 		fields := strings.Fields(line)
@@ -118,9 +125,8 @@ func Parse(txtFile string) (err error) {
 	}
 
 	start, end := GetBestTopHatPositions(scores)
-	for _, line := range lines[start:end] {
-		ings := GetIngredientsInString(line)
-		fmt.Println(ings)
+	for _, lineInfo := range lineInfos[start:end] {
+		fmt.Println(lineInfo)
 	}
 	return
 }
