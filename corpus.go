@@ -96,7 +96,9 @@ var corpusNumbers = strings.Split(`1/2
 ⅛
 ⅜
 ⅝
-⅞`, "\n")
+⅞
+⅔
+⅓`, "\n")
 
 var corpusIngredients = strings.Split(`salt
 sugar

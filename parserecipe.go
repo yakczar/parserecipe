@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"math"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/jaytaylor/html2text"
@@ -79,6 +80,8 @@ func Parse(txtFile string) (err error) {
 	txtFileData = strings.Replace(txtFileData, "3/8", "⅜", -1)
 	txtFileData = strings.Replace(txtFileData, "5/8", "⅝", -1)
 	txtFileData = strings.Replace(txtFileData, "7/8", "⅞", -1)
+	txtFileData = strings.Replace(txtFileData, "2/3", "⅔", -1)
+	txtFileData = strings.Replace(txtFileData, "1/3", "⅓", -1)
 	lines := strings.Split(strings.ToLower(txtFileData), "\n")
 	scores := make([]int, len(lines))
 
@@ -87,22 +90,24 @@ func Parse(txtFile string) (err error) {
 	}
 
 	type lineInfo struct {
+		line                string
 		ingredientsInString []WordPosition
-		numInString         []WordPosition
+		amountInString      []WordPosition
 		measureInString     []WordPosition
 	}
 
 	lineInfos := make([]lineInfo, len(lines))
 	for i, line := range lines {
+		lineInfos[i].line = line
 		lineInfos[i].ingredientsInString = GetIngredientsInString(line)
-		lineInfos[i].numInString = GetNumbersInString(line)
+		lineInfos[i].amountInString = GetNumbersInString(line)
 		lineInfos[i].measureInString = GetMeasuresInString(line)
 
 		score := 0
 		if len(lineInfos[i].ingredientsInString) > 0 {
 			score++
 		}
-		if len(lineInfos[i].numInString) > 0 {
+		if len(lineInfos[i].amountInString) > 0 {
 			score++
 		}
 		if len(lineInfos[i].measureInString) > 0 {
@@ -111,10 +116,10 @@ func Parse(txtFile string) (err error) {
 		if len(lineInfos[i].ingredientsInString) > 0 && len(lineInfos[i].measureInString) > 0 && lineInfos[i].ingredientsInString[0].Position > lineInfos[i].measureInString[0].Position {
 			score++
 		}
-		if len(lineInfos[i].ingredientsInString) > 0 && len(lineInfos[i].numInString) > 0 && lineInfos[i].ingredientsInString[0].Position > lineInfos[i].numInString[0].Position {
+		if len(lineInfos[i].ingredientsInString) > 0 && len(lineInfos[i].amountInString) > 0 && lineInfos[i].ingredientsInString[0].Position > lineInfos[i].amountInString[0].Position {
 			score++
 		}
-		if len(lineInfos[i].measureInString) > 0 && len(lineInfos[i].numInString) > 0 && lineInfos[i].measureInString[0].Position > lineInfos[i].numInString[0].Position {
+		if len(lineInfos[i].measureInString) > 0 && len(lineInfos[i].amountInString) > 0 && lineInfos[i].measureInString[0].Position > lineInfos[i].amountInString[0].Position {
 			score++
 		}
 		fields := strings.Fields(line)
@@ -126,9 +131,24 @@ func Parse(txtFile string) (err error) {
 
 	start, end := GetBestTopHatPositions(scores)
 	for _, lineInfo := range lineInfos[start:end] {
-		fmt.Println(lineInfo)
+		fmt.Println(lineInfo, getTotalAmount(lineInfo.amountInString))
 	}
 	return
+}
+
+func getTotalAmount(wps []WordPosition) float64 {
+	lastPosition := -1
+	totalAmount := 0.0
+	for i := range wps {
+		wps[i].Word = strings.TrimSpace(wps[i].Word)
+		if lastPosition == -1 {
+			totalAmount = convertStringToNumber(wps[i].Word)
+		} else if math.Abs(float64(wps[i].Position-lastPosition)) < 2 {
+			totalAmount += convertStringToNumber(wps[i].Word)
+		}
+		lastPosition = wps[i].Position
+	}
+	return totalAmount
 }
 
 func GetBestTopHatPositions(vector []int) (start, end int) {
@@ -183,4 +203,29 @@ func GenerateHat(length, start, stop int, value float64) []float64 {
 		f[i] = value
 	}
 	return f
+}
+
+func convertStringToNumber(s string) float64 {
+	switch s {
+	case "½":
+		return 0.5
+	case "¼":
+		return 0.25
+	case "¾":
+		return 0.75
+	case "⅛":
+		return 1.0 / 8
+	case "⅜":
+		return 3.0 / 8
+	case "⅝":
+		return 5.0 / 8
+	case "⅞":
+		return 7.0 / 8
+	case "⅔":
+		return 2.0 / 3
+	case "⅓":
+		return 1.0 / 3
+	}
+	v, _ := strconv.ParseFloat(s, 64)
+	return v
 }
