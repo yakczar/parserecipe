@@ -683,7 +683,8 @@ chicken soup
 spaghetti
 lemon peel
 black peppercorns
-lg. onion
+half and half
+onion
 yellow cake mix
 banana`, "\n")
 

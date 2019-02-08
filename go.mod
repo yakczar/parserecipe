@@ -6,6 +6,8 @@ require (
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/olekukonko/tablewriter v0.0.1 // indirect
 	github.com/schollz/getsong v0.4.0 // indirect
+	github.com/schollz/progressbar v1.0.0
+	github.com/schollz/progressbar/v2 v2.9.1
 	github.com/sirupsen/logrus v1.3.0
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/stretchr/testify v1.3.0

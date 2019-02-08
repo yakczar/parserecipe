@@ -10,6 +10,7 @@ import (
 
 	"github.com/jaytaylor/html2text"
 	colorable "github.com/mattn/go-colorable"
+	"github.com/schollz/progressbar/v2"
 	"github.com/sirupsen/logrus"
 )
 
@@ -84,10 +85,9 @@ type LineInfo struct {
 	Ingredient          Ingredient     `json:",omitempty"`
 }
 
-// func (lineInfo LineInfo) String() string {
-// 	j, _ := json.Marshal(lineInfo)
-// 	return string(j)
-// }
+type Parsed struct {
+	Lines []LineInfo
+}
 
 type Ingredient struct {
 	MeasureOriginal   Measure `json:",omitempty"`
@@ -110,15 +110,16 @@ type Measure struct {
 // - Number of ingredients is 1
 // - Percent of other words is less than 50%
 // - Part of list (contains - or *)
-func Parse(txtFile string) (err error) {
-	bFile, err := ioutil.ReadFile(txtFile)
-	if err != nil {
+func Parse(txtFile string) (parsed Parsed, rerr error) {
+	bFile, rerr := ioutil.ReadFile(txtFile)
+	if rerr != nil {
 		return
 	}
-	txtFileData, err := html2text.FromString(string(bFile), html2text.Options{PrettyTables: false, OmitLinks: true})
-	if err != nil {
+	txtFileData, rerr := html2text.FromString(string(bFile), html2text.Options{PrettyTables: false, OmitLinks: true})
+	if rerr != nil {
 		return
 	}
+	// ioutil.WriteFile("out", []byte(txtFileData), 0644)
 
 	lines := strings.Split(strings.ToLower(txtFileData), "\n")
 	scores := make([]int, len(lines))
@@ -150,14 +151,23 @@ func Parse(txtFile string) (err error) {
 		if len(lineInfos[i].MeasureInString) > 0 && len(lineInfos[i].AmountInString) > 0 && lineInfos[i].MeasureInString[0].Position > lineInfos[i].AmountInString[0].Position {
 			score++
 		}
+		if score > 0 && len(lineInfos[i].LineOriginal) > 100 {
+			score--
+		}
 		fields := strings.Fields(line)
 		if len(fields) > 0 && (fields[0] == "*" || fields[0] == "-") {
 			score++
 		}
+		if score == 1 {
+			score = 0
+		}
+		// log.Debugf("'%s' (%d)", line, score)
 		scores[i] = score
 	}
 
 	start, end := GetBestTopHatPositions(scores)
+	log.Debug(start, end)
+	parsed = Parsed{[]LineInfo{}}
 	for _, lineInfo := range lineInfos[start:end] {
 		if len(strings.TrimSpace(lineInfo.Line)) < 3 {
 			continue
@@ -184,8 +194,10 @@ func Parse(txtFile string) (err error) {
 		}
 		log.WithFields(logrus.Fields{
 			"line": strings.TrimSpace(lineInfo.LineOriginal),
-		}).Infof("%s: %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.MeasureOriginal)
+		}).Debugf("%s: %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.MeasureOriginal)
+		parsed.Lines = append(parsed.Lines, lineInfo)
 	}
+
 	return
 }
 
@@ -238,16 +250,18 @@ func GetBestTopHatPositions(vector []int) (start, end int) {
 	}
 
 	bestTopHatResidual := 1e9
+	bar := progressbar.NewOptions(len(vectorFloat), progressbar.OptionShowIts())
 	for i, v := range vectorFloat {
-		if v == 0 {
+		bar.Add(1)
+		if v < 2 {
 			continue
 		}
 		for j, w := range vectorFloat {
-			if j <= i || w == 0 {
+			if j <= i || w < 2 {
 				continue
 			}
 			hat := GenerateHat(len(vectorFloat), i, j, AverageFloats(vectorFloat[i:j]))
-			res := CalculateResidual(vectorFloat, hat)
+			res := CalculateResidual(vectorFloat, hat) / float64(len(vectorFloat))
 			if res < bestTopHatResidual {
 				bestTopHatResidual = res
 				start = i

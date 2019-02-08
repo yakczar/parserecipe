@@ -8,7 +8,17 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	assert.Nil(t, Parse("testing/sites/lasagna.html"))
+	files := []string{
+		"testing/sites/lasagna.html",
+		"testing/sites/chocolatecake.html",
+		"testing/sites/macandcheese.html",
+	}
+	for _, f := range files {
+		log.Infof("working on %s", f)
+		_, err := Parse(f)
+		assert.Nil(t, err)
+	}
+
 }
 
 func TestGetIngredientsInString(t *testing.T) {
