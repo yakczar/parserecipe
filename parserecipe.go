@@ -47,6 +47,13 @@ func GetMeasuresInString(s string) (wordPositions []WordPosition) {
 	return getWordPositions(s, corpusMeasures)
 }
 
+func SanitizeLine(s string) string {
+	s = strings.ToLower(s)
+	s = " " + strings.TrimSpace(s) + " "
+	s = strings.Replace(s, " one ", " 1 ", -1)
+	return s
+}
+
 // Parse looks for the following
 // - Contains number
 // - Contains mass/volume
@@ -76,10 +83,10 @@ func Parse(txtFile string) (err error) {
 	scores := make([]int, len(lines))
 
 	for i, line := range lines {
-		line = " " + strings.TrimSpace(line) + " "
-		// sanitize string
-		line = strings.Replace(line, " one ", " 1 ", -1)
+		lines[i] = SanitizeLine(line)
+	}
 
+	for i, line := range lines {
 		ingInString := GetIngredientsInString(line)
 		numInString := GetNumbersInString(line)
 		measureInString := GetMeasuresInString(line)
@@ -112,7 +119,8 @@ func Parse(txtFile string) (err error) {
 
 	start, end := GetBestTopHatPositions(scores)
 	for _, line := range lines[start:end] {
-		fmt.Println(line)
+		ings := GetIngredientsInString(line)
+		fmt.Println(ings)
 	}
 	return
 }
