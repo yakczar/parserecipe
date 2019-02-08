@@ -13,6 +13,7 @@ func TestParse(t *testing.T) {
 		"testing/sites/chocolatecake.html",
 		"testing/sites/macandcheese.html",
 		"testing/sites/granola-recipe-1939521",
+		"testing/sites/hawaiian-burgers-3611160",
 	}
 	for _, f := range files {
 		log.Infof("working on %s", f)
@@ -44,5 +45,5 @@ func TestTopHat(t *testing.T) {
 	vector := []int{0, 0, 0, 1, 0, 1, 1, 0, 0, 5, 4, 2, 6, 4, 1, 0, 0, 0, 4, 0, 0}
 	s, e := GetBestTopHatPositions(vector)
 	assert.Equal(t, 9, s)
-	assert.Equal(t, 13, e)
+	assert.Equal(t, 14, e)
 }

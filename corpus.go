@@ -678,6 +678,7 @@ vegetable broth
 lasagna noodles
 celery seed
 shallot
+teriyaki sauce
 clove
 chicken soup
 spaghetti
@@ -720,5 +721,6 @@ var corpusMeasuresMap = map[string]string{
 	"pound":       "pound",
 	"pounds":      "pound",
 	"cans":        "can",
+	"canned":      "can",
 	"can":         "can",
 }

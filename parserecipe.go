@@ -10,7 +10,6 @@ import (
 
 	"github.com/jaytaylor/html2text"
 	colorable "github.com/mattn/go-colorable"
-	"github.com/schollz/progressbar/v2"
 	"github.com/sirupsen/logrus"
 )
 
@@ -100,11 +99,11 @@ type Parsed struct {
 }
 
 type Ingredient struct {
+	Name              string  `json:",omitempty"`
+	Comment           string  `json:",omitempty"`
 	MeasureOriginal   Measure `json:",omitempty"`
 	MeasureConverted  Measure `json:",omitempty"`
 	MeasureNormalized Measure `json:",omitempty"`
-	Name              string  `json:",omitempty"`
-	Note              string  `json:",omitempty"`
 }
 
 type Measure struct {
@@ -190,6 +189,8 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 		if len(strings.TrimSpace(lineInfo.Line)) < 3 {
 			continue
 		}
+
+		// get amount, continue if there is an error
 		err := lineInfo.getTotalAmount()
 		if err != nil {
 			log.WithFields(logrus.Fields{
@@ -197,6 +198,8 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 			}).Errorf("%s", err.Error())
 			continue
 		}
+
+		// get ingredient, continue if its not found
 		err = lineInfo.getIngredient()
 		if err != nil {
 			log.WithFields(logrus.Fields{
@@ -204,18 +207,23 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 			}).Errorf("%s", err.Error())
 			continue
 		}
+
+		// get measure
 		err = lineInfo.getMeasure()
 		if err != nil {
 			log.WithFields(logrus.Fields{
 				"line": strings.TrimSpace(lineInfo.LineOriginal),
 			}).Errorf("%s", err.Error())
 		}
+
+		// get comment
 		if len(lineInfo.MeasureInString) > 0 && len(lineInfo.IngredientsInString) > 0 {
-			lineInfo.Ingredient.Note = GetOtherInBetweenPositions(lineInfo.Line, lineInfo.MeasureInString[0], lineInfo.IngredientsInString[0])
+			lineInfo.Ingredient.Comment = GetOtherInBetweenPositions(lineInfo.Line, lineInfo.MeasureInString[0], lineInfo.IngredientsInString[0])
 		}
+
 		log.WithFields(logrus.Fields{
 			"line": strings.TrimSpace(lineInfo.LineOriginal),
-		}).Debugf("%s (%s): %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.Note, lineInfo.Ingredient.MeasureOriginal)
+		}).Debugf("%s (%s): %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.Comment, lineInfo.Ingredient.MeasureOriginal)
 
 		parsed.Lines = append(parsed.Lines, lineInfo)
 	}
@@ -272,14 +280,12 @@ func GetBestTopHatPositions(vector []int) (start, end int) {
 	}
 
 	bestTopHatResidual := 1e9
-	bar := progressbar.NewOptions(len(vectorFloat), progressbar.OptionShowIts())
 	for i, v := range vectorFloat {
-		bar.Add(1)
 		if v < 2 {
 			continue
 		}
 		for j, w := range vectorFloat {
-			if j <= i || w < 2 {
+			if j <= i || w < 1 {
 				continue
 			}
 			hat := GenerateHat(len(vectorFloat), i, j, AverageFloats(vectorFloat[i:j]))
