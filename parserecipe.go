@@ -11,6 +11,7 @@ import (
 	"github.com/jaytaylor/html2text"
 	colorable "github.com/mattn/go-colorable"
 	"github.com/sirupsen/logrus"
+	prose "gopkg.in/jdkato/prose.v2"
 )
 
 // Create a new instance of the logger. You can have any number of instances.
@@ -73,8 +74,17 @@ func SanitizeLine(s string) string {
 	}
 
 	s = " " + strings.TrimSpace(s) + " "
+
+	// replace unicode fractions with fractions
+	for v := range corpusFractionNumberMap {
+		s = strings.Replace(s, v, corpusFractionNumberMap[v].fractionString, -1)
+	}
+
+	// remove non-alphanumeric
 	reg, _ := regexp.Compile("[^a-zA-Z0-9/]+")
 	s = reg.ReplaceAllString(s, " ")
+
+	// replace fractions with unicode fractions
 	for v := range corpusFractionNumberMap {
 		s = strings.Replace(s, corpusFractionNumberMap[v].fractionString, v, -1)
 	}
@@ -139,7 +149,16 @@ func ParseDirections(lis []LineInfo) (rerr error) {
 		if len(strings.TrimSpace(lis[i].Line)) == 0 {
 			continue
 		}
-		log.Debug(strings.TrimSpace(lis[i].LineOriginal))
+		doc, _ := prose.NewDocument(strings.TrimSpace(lis[i].LineOriginal))
+		sents := doc.Sentences()
+		for _, sent := range sents {
+			text := sent.Text
+			if string(text[0]) == string("*") {
+				text = strings.TrimSpace(text[1:])
+			}
+			log.Debug(text)
+		}
+
 	}
 	return
 }
