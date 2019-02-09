@@ -1,0 +1,62 @@
+{
+ "Ingredients": [
+  {
+   "Name": "flour",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "baking soda",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "salt",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "canola oil",
+   "MeasureOriginal": {
+    "Amount": 0.3333333333333333,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "sugar",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "eggs",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "banana",
+   "Comment": "mashed",
+   "MeasureOriginal": {
+    "Amount": 1.3333333333333333,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "chocolate",
+   "Comment": "mini",
+   "MeasureOriginal": {
+    "Amount": 0.6666666666666666,
+    "Name": "cup"
+   }
+  }
+ ]
+}

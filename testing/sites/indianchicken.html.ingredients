@@ -1,0 +1,121 @@
+{
+ "Ingredients": [
+  {
+   "Name": "chicken thighs",
+   "MeasureOriginal": {
+    "Amount": 6,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "tomato paste",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "tablespoons"
+   }
+  },
+  {
+   "Name": "ginger",
+   "Comment": "sized piece of fresh",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "tablespoon"
+   }
+  },
+  {
+   "Name": "garlic",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "garam masala",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "tablespoon"
+   }
+  },
+  {
+   "Name": "red pepper",
+   "Comment": "crushed",
+   "MeasureOriginal": {
+    "Amount": 0.25,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "paprika",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "cardamom",
+   "Comment": "ground",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "salt",
+   "Comment": "kosher",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "turmeric",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "almonds",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "yogurt",
+   "Comment": "greek",
+   "MeasureOriginal": {
+    "Amount": 0.75,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "canola oil",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "tablespoon"
+   }
+  },
+  {
+   "Name": "butter",
+   "MeasureOriginal": {
+    "Amount": 3,
+    "Name": "tablespoons"
+   }
+  },
+  {
+   "Name": "yellow onion",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "heavy cream",
+   "MeasureOriginal": {
+    "Amount": 0.25,
+    "Name": "cup"
+   }
+  }
+ ]
+}

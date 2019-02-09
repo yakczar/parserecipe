@@ -237,7 +237,6 @@ canola oil
 green onions
 bananas
 scallions
-cloves
 mustard
 chicken stock
 chives
@@ -554,7 +553,6 @@ canola oil
 green onions
 bananas
 scallions
-cloves
 mustard
 chicken stock
 chives

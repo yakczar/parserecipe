@@ -7,8 +7,17 @@ import (
 	"os"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
+
+func BenchmarkParse(b *testing.B) {
+	log.SetLevel(logrus.ErrorLevel)
+	for n := 0; n < b.N; n++ {
+		r, _ := NewFromFile("testing/sites/lasagna.html")
+		r.Parse()
+	}
+}
 
 func TestParse(t *testing.T) {
 	files := []string{
@@ -22,6 +31,7 @@ func TestParse(t *testing.T) {
 		"testing/sites/refriedbeans.html",
 		"testing/sites/pecans.html",
 		"testing/sites/banana.html",
+		"testing/sites/indianchicken.html",
 	}
 	for _, f := range files {
 		log.Infof("working on %s", f)

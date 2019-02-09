@@ -364,7 +364,6 @@ func (lineInfo *LineInfo) getMeasure() (err error) {
 }
 
 func GetBestTopHatPositions(vectorFloat []float64) (start, end int) {
-
 	bestTopHatResidual := 1e9
 	for i, v := range vectorFloat {
 		if v < 2 {
