@@ -1,0 +1,121 @@
+{
+ "Ingredients": [
+  {
+   "Name": "sugar",
+   "Comment": "granulated",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "flour",
+   "Comment": "all purpose",
+   "MeasureOriginal": {
+    "Amount": 1.75,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "cocoa",
+   "Comment": "unsweetened",
+   "MeasureOriginal": {
+    "Amount": 0.75,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "baking powder",
+   "MeasureOriginal": {
+    "Amount": 1.5,
+    "Name": "teaspoons"
+   }
+  },
+  {
+   "Name": "baking soda",
+   "MeasureOriginal": {
+    "Amount": 1.5,
+    "Name": "teaspoons"
+   }
+  },
+  {
+   "Name": "salt",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "eggs",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "buttermilk",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "oil",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "vanilla",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "teaspoons"
+   }
+  },
+  {
+   "Name": "water",
+   "Comment": "boiling",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "butter",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "cocoa",
+   "Comment": "unsweetened",
+   "MeasureOriginal": {
+    "Amount": 0.6666666666666666,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "powdered sugar",
+   "MeasureOriginal": {
+    "Amount": 3,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "milk",
+   "MeasureOriginal": {
+    "Amount": 0.3333333333333333,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "vanilla",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "teaspoon"
+   }
+  }
+ ]
+}

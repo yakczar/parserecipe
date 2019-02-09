@@ -1,0 +1,79 @@
+{
+ "Ingredients": [
+  {
+   "Name": "pasta",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "butter",
+   "Comment": "unsalted",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "flour",
+   "Comment": "all purpose",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "milk",
+   "Comment": "whole",
+   "MeasureOriginal": {
+    "Amount": 1.5,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "half and half",
+   "MeasureOriginal": {
+    "Amount": 2.5,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "cheddar cheese",
+   "Comment": "grated medium sharp",
+   "MeasureOriginal": {
+    "Amount": 4,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "cheese",
+   "Comment": "grated gruyere",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "salt",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "tbsp"
+   }
+  },
+  {
+   "Name": "black pepper",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "tsp"
+   }
+  },
+  {
+   "Name": "paprika",
+   "MeasureOriginal": {
+    "Amount": 0.25,
+    "Name": "tsp"
+   }
+  }
+ ]
+}

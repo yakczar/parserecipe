@@ -1,0 +1,87 @@
+{
+ "Ingredients": [
+  {
+   "Name": "beans",
+   "MeasureOriginal": {
+    "Amount": 4,
+    "Name": "canned"
+   }
+  },
+  {
+   "Name": "olive oil",
+   "Comment": "extra virgin",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "tablespoon"
+   }
+  },
+  {
+   "Name": "white onion",
+   "Comment": "finely chopped yellow or",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "salt",
+   "Comment": "fine sea",
+   "MeasureOriginal": {
+    "Amount": 0.25,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "cloves",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "chili powder",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "cumin",
+   "Comment": "ground",
+   "MeasureOriginal": {
+    "Amount": 0.25,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "beans",
+   "Comment": "pinto",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "cans"
+   }
+  },
+  {
+   "Name": "water",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "cilantro",
+   "Comment": "chopped fresh",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "tablespoons"
+   }
+  },
+  {
+   "Name": "lime juice",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "tablespoon"
+   }
+  }
+ ]
+}

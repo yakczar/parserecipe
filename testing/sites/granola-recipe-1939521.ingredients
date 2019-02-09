@@ -1,0 +1,71 @@
+{
+ "Ingredients": [
+  {
+   "Name": "oats",
+   "Comment": "rolled",
+   "MeasureOriginal": {
+    "Amount": 3,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "almonds",
+   "Comment": "slivered",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "cashews",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "coconut",
+   "Comment": "shredded sweet",
+   "MeasureOriginal": {
+    "Amount": 0.75,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "brown sugar",
+   "Comment": "dark",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "tablespoons"
+   }
+  },
+  {
+   "Name": "maple syrup",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "tablespoons"
+   }
+  },
+  {
+   "Name": "vegetable oil",
+   "MeasureOriginal": {
+    "Amount": 0.25,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "salt",
+   "MeasureOriginal": {
+    "Amount": 0.75,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "raisins",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "cup"
+   }
+  }
+ ]
+}

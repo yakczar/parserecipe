@@ -1,0 +1,62 @@
+{
+ "Ingredients": [
+  {
+   "Name": "eggs",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "flour",
+   "Comment": "all purpose",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "milk",
+   "MeasureOriginal": {
+    "Amount": 1.75,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "vegetable oil",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "sugar",
+   "Comment": "white",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "tablespoon"
+   }
+  },
+  {
+   "Name": "baking powder",
+   "MeasureOriginal": {
+    "Amount": 4,
+    "Name": "teaspoons"
+   }
+  },
+  {
+   "Name": "salt",
+   "MeasureOriginal": {
+    "Amount": 0.25,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "vanilla",
+   "MeasureOriginal": {
+    "Amount": 0.5,
+    "Name": "teaspoon"
+   }
+  }
+ ]
+}

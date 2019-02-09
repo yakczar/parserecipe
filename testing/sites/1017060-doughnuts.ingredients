@@ -1,0 +1,64 @@
+{
+ "Ingredients": [
+  {
+   "Name": "milk",
+   "MeasureOriginal": {
+    "Amount": 1.25,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "yeast",
+   "Comment": "active dry",
+   "MeasureOriginal": {
+    "Amount": 2.25,
+    "Name": "teaspoons"
+   }
+  },
+  {
+   "Name": "eggs",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "whole"
+   }
+  },
+  {
+   "Name": "butter",
+   "MeasureOriginal": {
+    "Amount": 8,
+    "Name": "tablespoons"
+   }
+  },
+  {
+   "Name": "sugar",
+   "Comment": "granulated",
+   "MeasureOriginal": {
+    "Amount": 0.25,
+    "Name": "cup"
+   }
+  },
+  {
+   "Name": "salt",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "flour",
+   "Comment": "all purpose",
+   "MeasureOriginal": {
+    "Amount": 4.25,
+    "Name": "cups"
+   }
+  },
+  {
+   "Name": "oil",
+   "Comment": "neutral",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "quarts"
+   }
+  }
+ ]
+}
