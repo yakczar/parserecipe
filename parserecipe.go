@@ -241,7 +241,7 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 
 	start, end := GetBestTopHatPositions(scores)
 
-	ParseDirections(lineInfos[end:])
+	// ParseDirections(lineInfos[end:])
 
 	parsed = Parsed{[]LineInfo{}}
 	for _, lineInfo := range lineInfos[start-3 : end+3] {

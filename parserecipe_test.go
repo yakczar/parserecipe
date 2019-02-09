@@ -15,6 +15,8 @@ func TestParse(t *testing.T) {
 		"testing/sites/granola-recipe-1939521",
 		"testing/sites/1017060-doughnuts",
 		"testing/sites/poutine.html",
+		"testing/sites/waffles.html",
+		"testing/sites/refriedbeans.html",
 	}
 	for _, f := range files {
 		log.Infof("working on %s", f)
