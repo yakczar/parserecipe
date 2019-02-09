@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
+	"net/http"
 	"os"
 	"regexp"
 	"sort"
@@ -117,6 +118,23 @@ type Recipe struct {
 func NewFromFile(fname string) (r *Recipe, err error) {
 	r = &Recipe{FileName: fname}
 	_, err = os.Stat(fname)
+	return
+}
+
+func NewFromURL(url string) (r *Recipe, err error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+	html, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+
+	r = &Recipe{FileName: url}
+	r.FileContent, err = html2text.FromString(string(html), html2text.Options{PrettyTables: false, OmitLinks: true})
+
 	return
 }
 
@@ -310,6 +328,14 @@ func (r *Recipe) Parse() (rerr error) {
 	}
 
 	return
+}
+
+func (r *Recipe) PrintIngredientList() string {
+	s := ""
+	for _, li := range r.Lines {
+		s += fmt.Sprintf("%s %s %s\n", AmountToString(li.Ingredient.MeasureOriginal.Amount), li.Ingredient.MeasureOriginal.Name, li.Ingredient.Name)
+	}
+	return s
 }
 
 // IngredientList will return a string containing the ingredient list

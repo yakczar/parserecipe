@@ -84,3 +84,10 @@ func TestAmountToString(t *testing.T) {
 	assert.Equal(t, "5 3/8", AmountToString(5.38))
 	assert.Equal(t, "1/2", AmountToString(0.5))
 }
+
+func TestBasic(t *testing.T) {
+	r, err := NewFromURL("https://joyfoodsunshine.com/the-most-amazing-chocolate-chip-cookies/")
+	assert.Nil(t, err)
+	r.Parse()
+	fmt.Println(r.PrintIngredientList())
+}
