@@ -6,6 +6,7 @@ import (
 	"math"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -38,6 +39,9 @@ func getWordPositions(s string, corpus []string) (wordPositions []WordPosition) 
 			wordPositions = append(wordPositions, WordPosition{ing, pos})
 		}
 	}
+	sort.Slice(wordPositions, func(i, j int) bool {
+		return wordPositions[i].Position < wordPositions[j].Position
+	})
 	return
 }
 

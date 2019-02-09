@@ -48,9 +48,10 @@
   },
   {
    "Name": "tomato sauce",
+   "Comment": "canned",
    "MeasureOriginal": {
     "Amount": 2,
-    "Name": "canned"
+    "Name": "cans"
    }
   },
   {

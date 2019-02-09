@@ -33,17 +33,18 @@
   },
   {
    "Name": "brown sugar",
-   "Comment": "dark",
+   "Comment": "plus 2 tablespoons dark",
    "MeasureOriginal": {
-    "Amount": 2,
-    "Name": "tablespoons"
+    "Amount": 0.25,
+    "Name": "cup"
    }
   },
   {
    "Name": "maple syrup",
+   "Comment": "plus 2 tablespoons",
    "MeasureOriginal": {
-    "Amount": 2,
-    "Name": "tablespoons"
+    "Amount": 0.25,
+    "Name": "cup"
    }
   },
   {
