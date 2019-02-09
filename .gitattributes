@@ -1,3 +1,4 @@
 *testing* linguist-vendored
+testing/sites/* linguist-vendored
 go.mod linguist-vendored
 go.sum linguist-vendored
