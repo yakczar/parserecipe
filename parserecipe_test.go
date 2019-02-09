@@ -66,3 +66,10 @@ func TestTopHat(t *testing.T) {
 	assert.Equal(t, 9, s)
 	assert.Equal(t, 14, e)
 }
+
+func TestAmountToString(t *testing.T) {
+	assert.Equal(t, "1 2/3", AmountToString(1.66666666))
+	assert.Equal(t, "10", AmountToString(10))
+	assert.Equal(t, "5 3/8", AmountToString(5.38))
+	assert.Equal(t, "1/2", AmountToString(0.5))
+}

@@ -435,11 +435,36 @@ func convertStringToNumber(s string) float64 {
 }
 
 func AmountToString(amount float64) string {
-	r, _ := ParseDecimal(fmt.Sprintf("%2.10f", roundToEighth(amount)))
-	return r.String()
-}
-func roundToEighth(val float64) float64 {
-	return math.Ceil(val*8) / 8
+	r, _ := ParseDecimal(fmt.Sprintf("%2.10f", amount))
+	rationalFraction := float64(r.n) / float64(r.d)
+	if rationalFraction > 0 {
+		bestFractionDiff := 1e9
+		bestFraction := 0.0
+		var fractions = map[float64]string{
+			1.0 / 2: "1/2",
+			1.0 / 3: "1/3",
+			2.0 / 3: "2/3",
+			1.0 / 8: "1/8",
+			3.0 / 8: "3/8",
+			5.0 / 8: "5/8",
+			7.0 / 8: "7/8",
+			1.0 / 4: "1/4",
+			3.0 / 4: "3/4",
+		}
+		for f := range fractions {
+			currentDiff := math.Abs(f - rationalFraction)
+			if currentDiff < bestFractionDiff {
+				bestFraction = f
+				bestFractionDiff = currentDiff
+			}
+		}
+		if r.i > 0 {
+			return strconv.FormatInt(r.i, 10) + " " + fractions[bestFraction]
+		} else {
+			return fractions[bestFraction]
+		}
+	}
+	return strconv.FormatInt(r.i, 10)
 }
 
 // A rational number r is expressed as the fraction p/q of two integers:
@@ -448,27 +473,6 @@ type Rational struct {
 	i int64 // integer
 	n int64 // fraction numerator
 	d int64 // fraction denominator
-}
-
-func (r Rational) String() string {
-	var s string
-	if r.i != 0 {
-		s += strconv.FormatInt(r.i, 10)
-	}
-	if r.n != 0 {
-		if r.i != 0 {
-			s += " "
-		}
-		if r.d < 0 {
-			r.n *= -1
-			r.d *= -1
-		}
-		s += strconv.FormatInt(r.n, 10) + "/" + strconv.FormatInt(r.d, 10)
-	}
-	if len(s) == 0 {
-		s += "0"
-	}
-	return s
 }
 
 func gcd(x, y int64) int64 {
