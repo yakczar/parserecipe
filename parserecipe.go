@@ -136,7 +136,10 @@ func ParseDirections(lis []LineInfo) (rerr error) {
 	start, end := GetBestTopHatPositions(scores)
 	log.Debugf("direction are from line %d to %d", start, end)
 	for i := start; i <= end; i++ {
-		log.Debug(lis[i].Line)
+		if len(strings.TrimSpace(lis[i].Line)) == 0 {
+			continue
+		}
+		log.Debug(strings.TrimSpace(lis[i].LineOriginal))
 	}
 	return
 }

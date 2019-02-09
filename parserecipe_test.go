@@ -9,11 +9,10 @@ import (
 
 func TestParse(t *testing.T) {
 	files := []string{
-		// "testing/sites/lasagna.html",
-		// "testing/sites/chocolatecake.html",
-		// "testing/sites/macandcheese.html",
-		// "testing/sites/granola-recipe-1939521",
-		"testing/sites/hawaiian-burgers-3611160",
+		"testing/sites/lasagna.html",
+		"testing/sites/chocolatecake.html",
+		"testing/sites/macandcheese.html",
+		"testing/sites/granola-recipe-1939521",
 	}
 	for _, f := range files {
 		log.Infof("working on %s", f)

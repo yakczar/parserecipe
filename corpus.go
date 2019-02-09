@@ -36,6 +36,17 @@ func init() {
 		corpusNumbers = append(corpusNumbers, v)
 	}
 
+	corpusDirectionsMap := make(map[string]struct{})
+	for _, c := range corpusDirections {
+		corpusDirectionsMap[c] = struct{}{}
+	}
+	corpusDirections = make([]string, len(corpusDirectionsMap))
+	i = 0
+	for c := range corpusDirectionsMap {
+		corpusDirections[i] = c
+		i++
+	}
+
 	// make sure each is flanked by space
 	for i, c := range corpusMeasures {
 		corpusMeasures[i] = " " + strings.TrimSpace(c) + " "
@@ -725,9 +736,9 @@ var corpusMeasuresMap = map[string]string{
 	"can":         "can",
 }
 
-var corpusDirections = strings.Fields(` in a dutch oven cook sausage ground beef onion and garlic over medium heat until well browned stir in crushed tomatoes tomato paste tomato sauce and water season with sugar basil fennel seeds italian seasoning 1 tablespoon salt pepper and 2 tablespoons parsley simmer covered for about 1 ½ hours stirring occasionally 
+var corpusDirections = strings.Fields(` in a dutch oven cook sausage ground beef onion and garlic over medium heat until well browned stir in crushed tomatoes tomato paste tomato sauce and water season with sugar basil fennel seeds italian seasoning 1 tablespoon salt pepper and 2 tablespoons parsley simmer covered for about 1 ½ hours stirring occasionally in a large bowl combine the oats nuts coconut and brown sugar 
 bring a large pot of lightly salted water to a boil cook lasagna noodles in boiling water for 8 to 10 minutes drain noodles and rinse with cold water in a mixing bowl combine ricotta cheese with eggs remaining parsley and ½ teaspoon salt 
 preheat oven to 375 degrees f 
 to assemble spread 1 ½ cups of meat sauce in the bottom of a 9x13 inch baking dish arrange 6 noodles lengthwise over meat sauce spread with 1 half of the ricotta cheese mixture top with a third of mozzarella cheese slices spoon 1 ½ cups meat sauce over mozzarella and sprinkle with ¼ cup parmesan cheese repeat layers and top with remaining mozzarella and parmesan cheese cover with foil to prevent sticking either spray foil with cooking spray or make sure the foil does not touch the cheese 
-bake in preheated oven for 25 minutes remove foil and bake an additional 25 minutes cool for 15 minutes before serving 
+bake in preheated oven for 25 minutes remove foil and bake an additional 25 minutes cool for 15 minutes before serving remove from oven and transfer into a large bowl add raisins and mix until evenly distributed
 `)
