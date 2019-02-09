@@ -11,7 +11,6 @@ import (
 	"github.com/jaytaylor/html2text"
 	colorable "github.com/mattn/go-colorable"
 	"github.com/sirupsen/logrus"
-	prose "gopkg.in/jdkato/prose.v2"
 )
 
 // Create a new instance of the logger. You can have any number of instances.
@@ -145,20 +144,21 @@ func ParseDirections(lis []LineInfo) (rerr error) {
 
 	start, end := GetBestTopHatPositions(scores)
 	log.Debugf("direction are from line %d to %d", start, end)
+	directionI := 1
 	for i := start; i <= end; i++ {
 		if len(strings.TrimSpace(lis[i].Line)) == 0 {
 			continue
 		}
-		doc, _ := prose.NewDocument(strings.TrimSpace(lis[i].LineOriginal))
-		sents := doc.Sentences()
-		for _, sent := range sents {
-			text := sent.Text
-			if string(text[0]) == string("*") {
-				text = strings.TrimSpace(text[1:])
-			}
-			log.Debug(text)
+		direction := strings.TrimSpace(lis[i].LineOriginal)
+		if string(direction[0]) == string("*") {
+			direction = strings.TrimSpace(direction[1:])
 		}
 
+		if len(strings.Fields(direction)) < 5 {
+			continue
+		}
+		log.Debugf("%d) %s", directionI, direction)
+		directionI++
 	}
 	return
 }
@@ -182,7 +182,7 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 		return
 	}
 
-	lines := strings.Split(strings.ToLower(txtFileData), "\n")
+	lines := strings.Split(txtFileData, "\n")
 	scores := make([]float64, len(lines))
 	lineInfos := make([]LineInfo, len(lines))
 	i := -1
@@ -241,7 +241,7 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 
 	start, end := GetBestTopHatPositions(scores)
 
-	// ParseDirections(lineInfos[end:])
+	ParseDirections(lineInfos[end:])
 
 	parsed = Parsed{[]LineInfo{}}
 	for _, lineInfo := range lineInfos[start-3 : end+3] {
