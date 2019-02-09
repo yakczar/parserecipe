@@ -30,7 +30,7 @@ func TestParse(t *testing.T) {
 		assert.Nil(t, err)
 		ingredientList := r.IngredientList()
 		if _, err := os.Stat(f + ".ingredients"); os.IsNotExist(err) {
-			b, _ := json.Marshal(ingredientList)
+			b, _ := json.MarshalIndent(ingredientList, "", " ")
 			ioutil.WriteFile(f+".ingredients", b, 0644)
 		} else {
 			b, _ := ioutil.ReadFile(f + ".ingredients")

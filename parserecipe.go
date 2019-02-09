@@ -117,26 +117,20 @@ func NewFromFile(fname string) (r *Recipe, err error) {
 }
 
 type Ingredient struct {
-	Name              string  `json:",omitempty"`
-	Comment           string  `json:",omitempty"`
-	MeasureOriginal   Measure `json:",omitempty"`
-	MeasureConverted  Measure `json:",omitempty"`
-	MeasureNormalized Measure `json:",omitempty"`
-}
-
-type IngredientList struct {
-	Ingredients []IngredientBasic
-}
-
-type IngredientBasic struct {
-	Name    string
-	Amount  float64
-	Measure string
+	Name              string   `json:",omitempty"`
+	Comment           string   `json:",omitempty"`
+	MeasureOriginal   *Measure `json:",omitempty"`
+	MeasureConverted  *Measure `json:",omitempty"`
+	MeasureNormalized *Measure `json:",omitempty"`
 }
 
 type Measure struct {
 	Amount float64
 	Name   string
+}
+
+type IngredientList struct {
+	Ingredients []Ingredient
 }
 
 func ParseDirections(lis []LineInfo) (rerr error) {
@@ -271,6 +265,8 @@ func (r *Recipe) Parse() (rerr error) {
 			continue
 		}
 
+		lineInfo.Ingredient.MeasureOriginal = &Measure{}
+
 		// get amount, continue if there is an error
 		err := lineInfo.getTotalAmount()
 		if err != nil {
@@ -314,13 +310,9 @@ func (r *Recipe) Parse() (rerr error) {
 
 // IngredientList will return a string containing the ingredient list
 func (r *Recipe) IngredientList() (ingredientList IngredientList) {
-	ingredientList = IngredientList{make([]IngredientBasic, len(r.Lines))}
+	ingredientList = IngredientList{make([]Ingredient, len(r.Lines))}
 	for i, li := range r.Lines {
-		ingredientList.Ingredients[i] = IngredientBasic{
-			Name:    li.Ingredient.Name,
-			Measure: li.Ingredient.MeasureOriginal.Name,
-			Amount:  li.Ingredient.MeasureOriginal.Amount,
-		}
+		ingredientList.Ingredients[i] = li.Ingredient
 	}
 	return
 }
