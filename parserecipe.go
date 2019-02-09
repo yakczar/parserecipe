@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -103,8 +104,16 @@ type LineInfo struct {
 	Ingredient          Ingredient     `json:",omitempty"`
 }
 
-type Parsed struct {
-	Lines []LineInfo
+type Recipe struct {
+	FileName    string
+	FileContent string
+	Lines       []LineInfo
+}
+
+func NewFromFile(fname string) (r *Recipe, err error) {
+	r = &Recipe{FileName: fname}
+	_, err = os.Stat(fname)
+	return
 }
 
 type Ingredient struct {
@@ -172,17 +181,20 @@ func ParseDirections(lis []LineInfo) (rerr error) {
 // - Number of ingredients is 1
 // - Percent of other words is less than 50%
 // - Part of list (contains - or *)
-func Parse(txtFile string) (parsed Parsed, rerr error) {
-	bFile, rerr := ioutil.ReadFile(txtFile)
-	if rerr != nil {
-		return
-	}
-	txtFileData, rerr := html2text.FromString(string(bFile), html2text.Options{PrettyTables: false, OmitLinks: true})
-	if rerr != nil {
-		return
+func (r *Recipe) Parse() (rerr error) {
+	if r.FileContent == "" && r.FileName != "" {
+		var bFile []byte
+		bFile, rerr = ioutil.ReadFile(r.FileName)
+		if rerr != nil {
+			return
+		}
+		r.FileContent, rerr = html2text.FromString(string(bFile), html2text.Options{PrettyTables: false, OmitLinks: true})
+		if rerr != nil {
+			return
+		}
 	}
 
-	lines := strings.Split(txtFileData, "\n")
+	lines := strings.Split(r.FileContent, "\n")
 	scores := make([]float64, len(lines))
 	lineInfos := make([]LineInfo, len(lines))
 	i := -1
@@ -243,7 +255,7 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 
 	ParseDirections(lineInfos[end:])
 
-	parsed = Parsed{[]LineInfo{}}
+	r.Lines = []LineInfo{}
 	for _, lineInfo := range lineInfos[start-3 : end+3] {
 		if len(strings.TrimSpace(lineInfo.Line)) < 3 {
 			continue
@@ -284,7 +296,7 @@ func Parse(txtFile string) (parsed Parsed, rerr error) {
 			"line": strings.TrimSpace(lineInfo.LineOriginal),
 		}).Debugf("%s (%s): %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.Comment, lineInfo.Ingredient.MeasureOriginal)
 
-		parsed.Lines = append(parsed.Lines, lineInfo)
+		r.Lines = append(r.Lines, lineInfo)
 	}
 
 	return

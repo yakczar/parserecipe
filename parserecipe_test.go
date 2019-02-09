@@ -21,7 +21,9 @@ func TestParse(t *testing.T) {
 	}
 	for _, f := range files {
 		log.Infof("working on %s", f)
-		_, err := Parse(f)
+		r, err := NewFromFile(f)
+		assert.Nil(t, err)
+		err = r.Parse()
 		assert.Nil(t, err)
 	}
 
