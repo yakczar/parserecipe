@@ -124,6 +124,16 @@ type Ingredient struct {
 	MeasureNormalized Measure `json:",omitempty"`
 }
 
+type IngredientList struct {
+	Ingredients []IngredientBasic
+}
+
+type IngredientBasic struct {
+	Name    string
+	Amount  float64
+	Measure string
+}
+
 type Measure struct {
 	Amount float64
 	Name   string
@@ -266,7 +276,7 @@ func (r *Recipe) Parse() (rerr error) {
 		if err != nil {
 			log.WithFields(logrus.Fields{
 				"line": strings.TrimSpace(lineInfo.LineOriginal),
-			}).Errorf("%s", err.Error())
+			}).Debugf("%s", err.Error())
 			continue
 		}
 
@@ -275,7 +285,7 @@ func (r *Recipe) Parse() (rerr error) {
 		if err != nil {
 			log.WithFields(logrus.Fields{
 				"line": strings.TrimSpace(lineInfo.LineOriginal),
-			}).Errorf("%s", err.Error())
+			}).Debugf("%s", err.Error())
 			continue
 		}
 
@@ -284,7 +294,7 @@ func (r *Recipe) Parse() (rerr error) {
 		if err != nil {
 			log.WithFields(logrus.Fields{
 				"line": strings.TrimSpace(lineInfo.LineOriginal),
-			}).Errorf("%s", err.Error())
+			}).Debugf("%s", err.Error())
 		}
 
 		// get comment
@@ -299,6 +309,19 @@ func (r *Recipe) Parse() (rerr error) {
 		r.Lines = append(r.Lines, lineInfo)
 	}
 
+	return
+}
+
+// IngredientList will return a string containing the ingredient list
+func (r *Recipe) IngredientList() (ingredientList IngredientList) {
+	ingredientList = IngredientList{make([]IngredientBasic, len(r.Lines))}
+	for i, li := range r.Lines {
+		ingredientList.Ingredients[i] = IngredientBasic{
+			Name:    li.Ingredient.Name,
+			Measure: li.Ingredient.MeasureOriginal.Name,
+			Amount:  li.Ingredient.MeasureOriginal.Amount,
+		}
+	}
 	return
 }
 
@@ -417,4 +440,91 @@ func convertStringToNumber(s string) float64 {
 	}
 	v, _ := strconv.ParseFloat(s, 64)
 	return v
+}
+
+func AmountToString(amount float64) string {
+	r, _ := ParseDecimal(fmt.Sprintf("%2.10f", roundToEighth(amount)))
+	return r.String()
+}
+func roundToEighth(val float64) float64 {
+	return math.Ceil(val*8) / 8
+}
+
+// A rational number r is expressed as the fraction p/q of two integers:
+// r = p/q = (d*i+n)/d.
+type Rational struct {
+	i int64 // integer
+	n int64 // fraction numerator
+	d int64 // fraction denominator
+}
+
+func (r Rational) String() string {
+	var s string
+	if r.i != 0 {
+		s += strconv.FormatInt(r.i, 10)
+	}
+	if r.n != 0 {
+		if r.i != 0 {
+			s += " "
+		}
+		if r.d < 0 {
+			r.n *= -1
+			r.d *= -1
+		}
+		s += strconv.FormatInt(r.n, 10) + "/" + strconv.FormatInt(r.d, 10)
+	}
+	if len(s) == 0 {
+		s += "0"
+	}
+	return s
+}
+
+func gcd(x, y int64) int64 {
+	for y != 0 {
+		x, y = y, x%y
+	}
+	return x
+}
+
+func ParseDecimal(s string) (r Rational, err error) {
+	sign := int64(1)
+	if strings.HasPrefix(s, "-") {
+		sign = -1
+	}
+	p := strings.IndexByte(s, '.')
+	if p < 0 {
+		p = len(s)
+	}
+	if i := s[:p]; len(i) > 0 {
+		if i != "+" && i != "-" {
+			r.i, err = strconv.ParseInt(i, 10, 64)
+			if err != nil {
+				return Rational{}, err
+			}
+		}
+	}
+	if p >= len(s) {
+		p = len(s) - 1
+	}
+	if f := s[p+1:]; len(f) > 0 {
+		n, err := strconv.ParseUint(f, 10, 64)
+		if err != nil {
+			return Rational{}, err
+		}
+		d := math.Pow10(len(f))
+		if math.Log2(d) > 63 {
+			err = fmt.Errorf(
+				"ParseDecimal: parsing %q: value out of range", f,
+			)
+			return Rational{}, err
+		}
+		r.n = int64(n)
+		r.d = int64(d)
+		if g := gcd(r.n, r.d); g != 0 {
+			r.n /= g
+			r.d /= g
+		}
+		r.n *= sign
+	}
+	return r, nil
 }

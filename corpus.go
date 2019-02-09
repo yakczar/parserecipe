@@ -18,18 +18,34 @@ func init() {
 		pl[i] = pair{k, v}
 		i++
 	}
-	sort.Sort(sort.Reverse(pl))
+	sort.Slice(pl, func(i, j int) bool {
+		if pl[i].Value == pl[j].Value {
+			return pl[i].Key < pl[j].Key
+		}
+		return pl[i].Value > pl[j].Value
+	})
 
 	corpusIngredients = make([]string, len(pl))
 	for i, p := range pl {
 		corpusIngredients[i] = p.Key
 	}
 
-	corpusMeasures = make([]string, len(corpusMeasuresMap))
+	// sort corpus measures
+	pl = make(pairList, len(corpusMeasuresMap))
 	i = 0
 	for k := range corpusMeasuresMap {
-		corpusMeasures[i] = k
+		pl[i] = pair{k, len(k)}
 		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		if pl[i].Value == pl[j].Value {
+			return pl[i].Key < pl[j].Key
+		}
+		return pl[i].Value > pl[j].Value
+	})
+	corpusMeasures = make([]string, len(pl))
+	for i, p := range pl {
+		corpusMeasures[i] = p.Key
 	}
 
 	for v := range corpusFractionNumberMap {
