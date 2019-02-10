@@ -13,6 +13,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/jaytaylor/html2text"
 	colorable "github.com/mattn/go-colorable"
@@ -290,7 +291,15 @@ func (r *Recipe) Parse() (rerr error) {
 
 	start, end := GetBestTopHatPositions(scores)
 
-	r.ParseDirections(lineInfos[end:])
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func(wg *sync.WaitGroup) {
+		defer wg.Done()
+		err := r.ParseDirections(lineInfos[end:])
+		if err != nil {
+			log.Warn(err.Error())
+		}
+	}(&wg)
 
 	r.Lines = []LineInfo{}
 	for _, lineInfo := range lineInfos[start-3 : end+3] {
@@ -337,6 +346,8 @@ func (r *Recipe) Parse() (rerr error) {
 
 		r.Lines = append(r.Lines, lineInfo)
 	}
+	wg.Done()
+	wg.Wait()
 
 	return
 }
