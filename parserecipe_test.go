@@ -85,7 +85,7 @@ func TestGetIngredientsInString(t *testing.T) {
 
 func TestTopHat(t *testing.T) {
 	vector := []float64{0, 0, 0, 1, 0, 1, 1, 0, 0, 5, 4, 2, 6, 4, 1, 0, 0, 0, 4, 0, 0}
-	s, e := GetBestTopHatPositions(vector)
+	s, e := getBestTopHatPositions(vector)
 	assert.Equal(t, 9, s)
 	assert.Equal(t, 14, e)
 }

@@ -23,12 +23,16 @@ import (
 // Create a new instance of the logger. You can have any number of instances.
 var log = logrus.New()
 
+// initialize the logger
 func init() {
 	log.SetFormatter(&logrus.TextFormatter{ForceColors: true})
 	log.SetOutput(colorable.NewColorableStdout())
 	log.SetLevel(logrus.DebugLevel)
 }
 
+// WordPosition shows a word and its position
+// Note: the position is memory-dependent as it will
+// be the position after the last deleted word
 type WordPosition struct {
 	Word     string
 	Position int
@@ -50,6 +54,7 @@ func getWordPositions(s string, corpus []string) (wordPositions []WordPosition) 
 	return
 }
 
+// GetOtherInBetweenPositions returns the word positions comment string in the ingredients
 func GetOtherInBetweenPositions(s string, pos1, pos2 WordPosition) (other string) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -61,18 +66,23 @@ func GetOtherInBetweenPositions(s string, pos1, pos2 WordPosition) (other string
 	return
 }
 
+// GetIngredientsInString returns the word positions of the ingredients
 func GetIngredientsInString(s string) (wordPositions []WordPosition) {
 	return getWordPositions(s, corpusIngredients)
 }
 
+// GetNumbersInString returns the word positions of the numbers in the ingredient string
 func GetNumbersInString(s string) (wordPositions []WordPosition) {
 	return getWordPositions(s, corpusNumbers)
 }
 
+// GetMeasuresInString returns the word positions of the measures in a ingredient string
 func GetMeasuresInString(s string) (wordPositions []WordPosition) {
 	return getWordPositions(s, corpusMeasures)
 }
 
+// SanitizeLine removes parentheses, trims the line, converts to lower case,
+// replaces fractions with unicode and then does special conversion for ingredients (like eggs).
 func SanitizeLine(s string) string {
 	s = strings.ToLower(s)
 
@@ -104,6 +114,7 @@ func SanitizeLine(s string) string {
 	return s
 }
 
+// LineInfo has all the information for the parsing of a given line
 type LineInfo struct {
 	LineOriginal        string
 	Line                string         `json:",omitempty"`
@@ -113,6 +124,7 @@ type LineInfo struct {
 	Ingredient          Ingredient     `json:",omitempty"`
 }
 
+// Recipe contains the info for the file and the lines
 type Recipe struct {
 	FileName    string
 	FileContent string
@@ -120,12 +132,14 @@ type Recipe struct {
 	Directions  []string
 }
 
+// NewFromFile generates a new parser from a file
 func NewFromFile(fname string) (r *Recipe, err error) {
 	r = &Recipe{FileName: fname}
 	_, err = os.Stat(fname)
 	return
 }
 
+// NewFromURL generates a new parser from a url
 func NewFromURL(url string) (r *Recipe, err error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -143,23 +157,26 @@ func NewFromURL(url string) (r *Recipe, err error) {
 	return
 }
 
+// Ingredient is the basic struct for ingredients
 type Ingredient struct {
 	Name    string  `json:",omitempty"`
 	Comment string  `json:",omitempty"`
 	Measure Measure `json:",omitempty"`
 }
 
+// Measure includes the amount, name and the cups for conversions
 type Measure struct {
 	Amount float64
 	Name   string
 	Cups   float64
 }
 
+// IngredientList is a list of ingredients
 type IngredientList struct {
 	Ingredients []Ingredient
 }
 
-func (r *Recipe) ParseDirections(lis []LineInfo) (rerr error) {
+func (r *Recipe) parseDirections(lis []LineInfo) (rerr error) {
 	log.Debug(len(lis))
 	scores := make([]float64, len(lis))
 	for i, li := range lis {
@@ -186,7 +203,7 @@ func (r *Recipe) ParseDirections(lis []LineInfo) (rerr error) {
 		scores[i] = score
 	}
 
-	start, end := GetBestTopHatPositions(scores)
+	start, end := getBestTopHatPositions(scores)
 	log.Debugf("direction are from line %d to %d", start, end)
 	directionI := 1
 	r.Directions = []string{}
@@ -209,7 +226,8 @@ func (r *Recipe) ParseDirections(lis []LineInfo) (rerr error) {
 	return
 }
 
-// Parse looks for the following
+// Parse is the main parser for a given recipe.
+// It looks for the following
 // - Contains number
 // - Contains mass/volume
 // - Contains ingredient
@@ -248,31 +266,40 @@ func (r *Recipe) Parse() (rerr error) {
 		lineInfos[i].MeasureInString = GetMeasuresInString(line)
 
 		score := 0.0
+		// does it contain an ingredient?
 		if len(lineInfos[i].IngredientsInString) > 0 {
 			score++
 		}
+		// does it contain an amount?
 		if len(lineInfos[i].AmountInString) > 0 {
 			score++
 		}
+		// does it contain a measure (cups, tsps)?
 		if len(lineInfos[i].MeasureInString) > 0 {
 			score++
 		}
+		// does the ingredient come after the measure?
 		if len(lineInfos[i].IngredientsInString) > 0 && len(lineInfos[i].MeasureInString) > 0 && lineInfos[i].IngredientsInString[0].Position > lineInfos[i].MeasureInString[0].Position {
 			score++
 		}
+		// does the ingredient come after the amount?
 		if len(lineInfos[i].IngredientsInString) > 0 && len(lineInfos[i].AmountInString) > 0 && lineInfos[i].IngredientsInString[0].Position > lineInfos[i].AmountInString[0].Position {
 			score++
 		}
+		// does the measure come after the amount?
 		if len(lineInfos[i].MeasureInString) > 0 && len(lineInfos[i].AmountInString) > 0 && lineInfos[i].MeasureInString[0].Position > lineInfos[i].AmountInString[0].Position {
 			score++
 		}
+		// is the line really long? (ingredient lines are short)
 		if score > 0 && len(lineInfos[i].LineOriginal) > 100 {
 			score--
 		}
+		// does it start with a list indicator (* or -)?
 		fields := strings.Fields(line)
 		if len(fields) > 0 && (fields[0] == "*" || fields[0] == "-") {
 			score++
 		}
+		// if only one thing is right, its wrong
 		if score == 1 {
 			score = 0.0
 		}
@@ -282,19 +309,21 @@ func (r *Recipe) Parse() (rerr error) {
 	scores = scores[:i+1]
 	lineInfos = lineInfos[:i+1]
 
-	lines = make([]string, len(lineInfos))
-	for i, li := range lineInfos {
-		lines[i] = li.Line
-	}
-	ioutil.WriteFile("out", []byte(strings.Join(lines, "\n")), 0644)
+	// debugging purposes
+	// lines = make([]string, len(lineInfos))
+	// for i, li := range lineInfos {
+	// 	lines[i] = li.Line
+	// }
+	// ioutil.WriteFile("out", []byte(strings.Join(lines, "\n")), 0644)
 
-	start, end := GetBestTopHatPositions(scores)
+	// get the most likely location
+	start, end := getBestTopHatPositions(scores)
 
 	var wg sync.WaitGroup
 	wg.Add(2)
 	go func(wg *sync.WaitGroup) {
 		defer wg.Done()
-		err := r.ParseDirections(lineInfos[end:])
+		err := r.parseDirections(lineInfos[end:])
 		if err != nil {
 			log.Warn(err.Error())
 		}
@@ -428,7 +457,7 @@ func (lineInfo *LineInfo) getMeasure() (err error) {
 	return
 }
 
-func GetBestTopHatPositions(vectorFloat []float64) (start, end int) {
+func getBestTopHatPositions(vectorFloat []float64) (start, end int) {
 	bestTopHatResidual := 1e9
 	for i, v := range vectorFloat {
 		if v < 2 {
@@ -438,8 +467,8 @@ func GetBestTopHatPositions(vectorFloat []float64) (start, end int) {
 			if j <= i || w < 1 {
 				continue
 			}
-			hat := GenerateHat(len(vectorFloat), i, j, AverageFloats(vectorFloat[i:j]))
-			res := CalculateResidual(vectorFloat, hat) / float64(len(vectorFloat))
+			hat := generateHat(len(vectorFloat), i, j, averageFloats(vectorFloat[i:j]))
+			res := calculateResidual(vectorFloat, hat) / float64(len(vectorFloat))
 			if res < bestTopHatResidual {
 				bestTopHatResidual = res
 				start = i
@@ -450,7 +479,7 @@ func GetBestTopHatPositions(vectorFloat []float64) (start, end int) {
 	return
 }
 
-func CalculateResidual(fs1, fs2 []float64) float64 {
+func calculateResidual(fs1, fs2 []float64) float64 {
 	res := 0.0
 	if len(fs1) != len(fs2) {
 		return -1
@@ -461,7 +490,7 @@ func CalculateResidual(fs1, fs2 []float64) float64 {
 	return res
 }
 
-func AverageFloats(fs []float64) float64 {
+func averageFloats(fs []float64) float64 {
 	f := 0.0
 	for _, v := range fs {
 		f += v
@@ -469,7 +498,7 @@ func AverageFloats(fs []float64) float64 {
 	return f / float64(len(fs))
 }
 
-func GenerateHat(length, start, stop int, value float64) []float64 {
+func generateHat(length, start, stop int, value float64) []float64 {
 	f := make([]float64, length)
 	for i := start; i < stop; i++ {
 		f[i] = value
@@ -503,7 +532,7 @@ func convertStringToNumber(s string) float64 {
 }
 
 func AmountToString(amount float64) string {
-	r, _ := ParseDecimal(fmt.Sprintf("%2.10f", amount))
+	r, _ := parseDecimal(fmt.Sprintf("%2.10f", amount))
 	rationalFraction := float64(r.n) / float64(r.d)
 	if rationalFraction > 0 {
 		bestFractionDiff := 1e9
@@ -537,7 +566,7 @@ func AmountToString(amount float64) string {
 
 // A rational number r is expressed as the fraction p/q of two integers:
 // r = p/q = (d*i+n)/d.
-type Rational struct {
+type rational struct {
 	i int64 // integer
 	n int64 // fraction numerator
 	d int64 // fraction denominator
@@ -550,7 +579,7 @@ func gcd(x, y int64) int64 {
 	return x
 }
 
-func ParseDecimal(s string) (r Rational, err error) {
+func parseDecimal(s string) (r rational, err error) {
 	sign := int64(1)
 	if strings.HasPrefix(s, "-") {
 		sign = -1
@@ -563,7 +592,7 @@ func ParseDecimal(s string) (r Rational, err error) {
 		if i != "+" && i != "-" {
 			r.i, err = strconv.ParseInt(i, 10, 64)
 			if err != nil {
-				return Rational{}, err
+				return rational{}, err
 			}
 		}
 	}
@@ -573,14 +602,14 @@ func ParseDecimal(s string) (r Rational, err error) {
 	if f := s[p+1:]; len(f) > 0 {
 		n, err := strconv.ParseUint(f, 10, 64)
 		if err != nil {
-			return Rational{}, err
+			return rational{}, err
 		}
 		d := math.Pow10(len(f))
 		if math.Log2(d) > 63 {
 			err = fmt.Errorf(
 				"ParseDecimal: parsing %q: value out of range", f,
 			)
-			return Rational{}, err
+			return rational{}, err
 		}
 		r.n = int64(n)
 		r.d = int64(d)
