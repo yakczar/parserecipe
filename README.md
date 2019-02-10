@@ -30,6 +30,16 @@ fmt.Println(r.PrintIngredientList())
 // 2 cups chocolate
 ```
 
+## Develop
+
+If you modify the `corpus/` information then you will need to run 
+
+```
+$ go generate
+```
+
+before using the library again.
+
 ## Contributing
 
 Pull requests are welcome. Feel free to...
