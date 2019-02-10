@@ -349,6 +349,12 @@ func (r *Recipe) Parse() (rerr error) {
 	wg.Done()
 	wg.Wait()
 
+	rerr = r.ConvertIngredients()
+	return
+}
+
+func (r *Recipe) ConvertIngredients() (err error) {
+
 	return
 }
 
