@@ -1,0 +1,62 @@
+{
+ "Ingredients": [
+  {
+   "Name": "eggs",
+   "Measure": {
+    "Amount": 12,
+    "Name": "whole",
+    "Cups": 3
+   }
+  },
+  {
+   "Name": "sugar",
+   "Measure": {
+    "Amount": 1.5,
+    "Name": "cups",
+    "Cups": 1.5
+   }
+  },
+  {
+   "Name": "salt",
+   "Measure": {
+    "Amount": 0.5,
+    "Name": "teaspoon",
+    "Cups": 0.0104165
+   }
+  },
+  {
+   "Name": "milk",
+   "Comment": "whole",
+   "Measure": {
+    "Amount": 8,
+    "Name": "cups",
+    "Cups": 8
+   }
+  },
+  {
+   "Name": "vanilla",
+   "Measure": {
+    "Amount": 2,
+    "Name": "tablespoons",
+    "Cups": 0.125
+   }
+  },
+  {
+   "Name": "nutmeg",
+   "Comment": "ground",
+   "Measure": {
+    "Amount": 1,
+    "Name": "teaspoon",
+    "Cups": 0.020833
+   }
+  },
+  {
+   "Name": "heavy whipping cream",
+   "Measure": {
+    "Amount": 2,
+    "Name": "cups",
+    "Cups": 2
+   }
+  }
+ ]
+}
