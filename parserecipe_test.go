@@ -49,6 +49,15 @@ func TestParse(t *testing.T) {
 			assert.Nil(t, json.Unmarshal(b, &previousIngredientList))
 			assert.Equal(t, previousIngredientList, ingredientList)
 		}
+		if _, err := os.Stat(f + ".directions"); os.IsNotExist(err) {
+			b, _ := json.MarshalIndent(r.Directions, "", " ")
+			ioutil.WriteFile(f+".directions", b, 0644)
+		} else {
+			b, _ := ioutil.ReadFile(f + ".directions")
+			var previousDirections []string
+			assert.Nil(t, json.Unmarshal(b, &previousDirections))
+			assert.Equal(t, previousDirections, r.Directions)
+		}
 	}
 
 }
