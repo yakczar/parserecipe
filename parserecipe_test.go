@@ -35,6 +35,8 @@ func TestParse(t *testing.T) {
 		"testing/sites/1014578-four-spice-salmon",
 		"testing/sites/eggnog.html",
 		"testing/sites/pancakes.html",
+		"testing/sites/pancakes2.html",
+		"testing/sites/pancakes3.html",
 	}
 	for _, f := range files {
 		log.Infof("working on %s", f)
@@ -121,14 +123,16 @@ func TestNormalize(t *testing.T) {
 }
 
 func TestAnalyze(t *testing.T) {
-	log.SetLevel(logrus.ErrorLevel)
+	// log.SetLevel(logrus.ErrorLevel)
 	recipes := []string{"testing/sites/pancakes.html", "testing/sites/pancakes2.html", "testing/sites/pancakes3.html"}
 	var r [3]*Recipe
 	for i := 0; i < len(recipes); i++ {
 		r[i], _ = NewFromFile(recipes[i])
 		assert.Nil(t, r[i].Parse())
 		r[i].Analyze()
-		fmt.Println(r[i].Ratios["eggs"])
+		fmt.Println(r[i].PrintIngredientList())
 	}
 
+	log.SetLevel(logrus.DebugLevel)
+	AverageRecipes(r[0:3])
 }

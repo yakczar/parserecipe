@@ -85,6 +85,8 @@ func GetMeasuresInString(s string) (wordPositions []WordPosition) {
 // replaces fractions with unicode and then does special conversion for ingredients (like eggs).
 func SanitizeLine(s string) string {
 	s = strings.ToLower(s)
+	s = strings.Replace(s, "⁄", "/", -1)
+	s = strings.Replace(s, " / ", "/", -1)
 
 	// remove parentheses
 	re := regexp.MustCompile(`(?s)\((.*)\)`)
@@ -161,9 +163,10 @@ func NewFromURL(url string) (r *Recipe, err error) {
 
 // Ingredient is the basic struct for ingredients
 type Ingredient struct {
-	Name    string  `json:",omitempty"`
-	Comment string  `json:",omitempty"`
-	Measure Measure `json:",omitempty"`
+	Name      string  `json:",omitempty"`
+	Comment   string  `json:",omitempty"`
+	Measure   Measure `json:",omitempty"`
+	Frequency float64 `json:",omitempty`
 }
 
 // Measure includes the amount, name and the cups for conversions
@@ -383,7 +386,8 @@ func (r *Recipe) Parse() (rerr error) {
 		}
 
 		log.WithFields(logrus.Fields{
-			"line": strings.TrimSpace(lineInfo.LineOriginal),
+			"sanitize": strings.TrimSpace(lineInfo.Line),
+			"original": strings.TrimSpace(lineInfo.LineOriginal),
 		}).Debugf("%s (%s): %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.Comment, lineInfo.Ingredient.Measure)
 
 		r.Lines = append(r.Lines, lineInfo)
@@ -688,7 +692,96 @@ func (r *Recipe) Analyze() (err error) {
 	return
 }
 
-// DistanceTo returns the distance between the recipes
-func (r *Recipe) DistanceTo(r2 Recipe) (distnace float64, err error) {
+// AverageRecipes returns the distance between the recipes
+func AverageRecipes(rs []*Recipe) (err error) {
+	if len(rs) < 2 {
+		err = fmt.Errorf("not enough recipes")
+		return err
+	}
+	totalFull := make([]float64, len(rs))
+	// totalPartial := make([]float64, len(rs))
+	rIngredients := make([]map[string]Ingredient, len(rs))
+
+	for i := 0; i < len(rs); i++ {
+		rIngredients[i] = make(map[string]Ingredient)
+		for _, ing := range rs[i].Ingredients {
+			totalFull[i] += ing.Measure.Cups
+			rIngredients[i][ing.Name] = ing
+		}
+	}
+
+	ingredientFrequencies := make(map[string]float64)
+	for i := 0; i < len(rs); i++ {
+		for ing := range rIngredients[i] {
+			if _, ok := ingredientFrequencies[ing]; !ok {
+				ingredientFrequencies[ing] = 0
+			}
+			ingredientFrequencies[ing] += 1 / float64(len(rs))
+		}
+	}
+	log.Debugf("ingredientFrequencies: %+v", ingredientFrequencies)
+
+	ingredientRatios := make(map[string]map[string][]float64)
+	for i := 0; i < len(rs); i++ {
+		for ing := range rs[i].Ratios {
+			if _, ok := ingredientRatios[ing]; !ok {
+				ingredientRatios[ing] = make(map[string][]float64)
+			}
+			for ing2 := range rs[i].Ratios[ing] {
+				if _, ok := ingredientRatios[ing][ing2]; !ok {
+					ingredientRatios[ing][ing2] = []float64{}
+				}
+				ingredientRatios[ing][ing2] = append(ingredientRatios[ing][ing2], rs[i].Ratios[ing][ing2])
+			}
+		}
+	}
+	log.Debugf("ingredientRatios: %+v", ingredientRatios)
+
+	// ingredientsInBoth := []string{}
+	// ingredientsInBothMap := make(map[string]struct{})
+	// for ing := range r0Ingredients {
+	// 	if _, ok := r1Ingredients[ing]; ok {
+	// 		ingredientsInBoth = append(ingredientsInBoth, ing)
+	// 		ingredientsInBothMap[ing] = struct{}{}
+	// 	} else {
+	// 		log.Debugf("r0 has %s %2.3f", ing, r0Ingredients[ing].Measure.Cups/totalFull[0])
+	// 	}
+	// }
+	// for ing := range r1Ingredients {
+	// 	if _, ok := r0Ingredients[ing]; !ok {
+	// 		log.Debugf("r1 has %s %2.3f", ing, r1Ingredients[ing].Measure.Cups/totalFull[1])
+	// 	}
+	// }
+
+	// missing := [2]int{0, 0}
+	// missing[0] = len(r0.Ratios) - len(ingredientsInBoth)
+	// missing[1] = len(r1.Ratios) - len(ingredientsInBoth)
+	// log.Debugf("missing: %+v", missing)
+
+	// for _, ing := range ingredientsInBoth {
+	// 	totalPartial[0] += r0Ingredients[ing].Measure.Cups
+	// 	totalPartial[1] += r1Ingredients[ing].Measure.Cups
+	// }
+
+	// for _, ing := range ingredientsInBoth {
+	// 	log.Debugf("%s %2.1f%% %2.1f%%", ing,
+	// 		r0Ingredients[ing].Measure.Cups/totalPartial[0]*100,
+	// 		r1Ingredients[ing].Measure.Cups/totalPartial[1]*100,
+	// 	)
+	// }
+
+	// for _, ing1 := range ingredientsInBoth {
+	// 	for _, ing2 := range ingredientsInBoth {
+	// 		if ing1 >= ing2 {
+	// 			continue
+	// 		}
+	// 		log.Debugf("%s/%s %2.2f %2.2f",
+	// 			ing1, ing2,
+	// 			r0.Ratios[ing1][ing2],
+	// 			r1.Ratios[ing1][ing2],
+	// 		)
+	// 	}
+	// }
+
 	return
 }
