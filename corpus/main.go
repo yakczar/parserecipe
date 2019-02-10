@@ -93,11 +93,18 @@ func main() {
 	for _, c := range corpusDirections {
 		corpusDirectionsMap[strings.ToLower(c)] = struct{}{}
 	}
-	corpusDirections = make([]string, len(corpusDirectionsMap))
+	pl = make(pairList, len(corpusDirectionsMap))
 	i = 0
-	for c := range corpusDirectionsMap {
-		corpusDirections[i] = c
+	for k := range corpusDirectionsMap {
+		pl[i] = pair{k, len(k)}
 		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		return pl[i].Key < pl[j].Key
+	})
+	corpusDirections = make([]string, len(pl))
+	for i, p := range pl {
+		corpusDirections[i] = p.Key
 	}
 	f.WriteString(`var corpusDirections = []string{"` + strings.Join(corpusDirections, `"`+",\n"+`"`) + `"}` + "\n")
 	f.Sync()
@@ -108,14 +115,32 @@ func main() {
 	}
 	`)
 	f.WriteString(`var corpusFractionNumberMap = map[string]fractionNumber{` + "\n")
+	pl = make(pairList, len(corpusFractionNumberMap))
+	i = 0
 	for k := range corpusFractionNumberMap {
-		f.WriteString(fmt.Sprintf(`"%s": fractionNumber{"%s",%10.10f},`, k, corpusFractionNumberMap[k].fractionString, corpusFractionNumberMap[k].value) + "\n")
+		pl[i] = pair{k, len(k)}
+		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		return pl[i].Key < pl[j].Key
+	})
+	for _, p := range pl {
+		f.WriteString(fmt.Sprintf(`"%s": fractionNumber{"%s",%10.10f},`, p.Key, corpusFractionNumberMap[p.Key].fractionString, corpusFractionNumberMap[p.Key].value) + "\n")
 	}
 	f.WriteString("}\n\n")
 
 	f.WriteString(`var corpusMeasuresMap = map[string]string{` + "\n")
+	pl = make(pairList, len(corpusMeasuresMap))
+	i = 0
 	for k := range corpusMeasuresMap {
-		f.WriteString(fmt.Sprintf(`"%s": "%s",`, k, corpusMeasuresMap[k]) + "\n")
+		pl[i] = pair{k, len(k)}
+		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		return pl[i].Key < pl[j].Key
+	})
+	for _, p := range pl {
+		f.WriteString(fmt.Sprintf(`"%s": "%s",`, p.Key, corpusMeasuresMap[p.Key]) + "\n")
 	}
 	f.WriteString("}\n\n")
 
