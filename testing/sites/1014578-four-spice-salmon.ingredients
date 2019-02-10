@@ -1,0 +1,41 @@
+{
+ "Ingredients": [
+  {
+   "Name": "salmon",
+   "Comment": "skinned",
+   "MeasureOriginal": {
+    "Amount": 10,
+    "Name": "ounce"
+   }
+  },
+  {
+   "Name": "coriander",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "tablespoon"
+   }
+  },
+  {
+   "Name": "cumin seed",
+   "MeasureOriginal": {
+    "Amount": 1.5,
+    "Name": "teaspoons"
+   }
+  },
+  {
+   "Name": "nutmeg",
+   "Comment": "freshly grated",
+   "MeasureOriginal": {
+    "Amount": 1,
+    "Name": "teaspoon"
+   }
+  },
+  {
+   "Name": "peanut oil",
+   "MeasureOriginal": {
+    "Amount": 2,
+    "Name": "tablespoons"
+   }
+  }
+ ]
+}
