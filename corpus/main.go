@@ -24,7 +24,7 @@ func main() {
 	// MAIN INGREDIENT LIST
 	// sort the ingredient corpus by the length of each term
 	// and then by alphabetizing
-	bIngredients, err := ioutil.ReadFile("ingredients.txt")
+	bIngredients, err := ioutil.ReadFile("corpus/ingredients.txt")
 	corpusIngredients := strings.Split(string(bIngredients), "\n")
 	ingredientSizes := make(map[string]int)
 	for _, ing := range corpusIngredients {
@@ -75,7 +75,7 @@ func main() {
 	f.Sync()
 
 	// MAKE NUMBERS
-	b, err := ioutil.ReadFile("numbers.txt")
+	b, err := ioutil.ReadFile("corpus/numbers.txt")
 	corpusNumbers := strings.Split(string(b), "\n")
 	for v := range corpusFractionNumberMap {
 		corpusNumbers = append(corpusNumbers, v)
@@ -87,7 +87,7 @@ func main() {
 	f.Sync()
 
 	// MAKE DIRECTIONS CORPUS
-	b, err = ioutil.ReadFile("directions_pos.txt")
+	b, err = ioutil.ReadFile("corpus/directions_pos.txt")
 	corpusDirections := strings.Fields(string(b))
 	corpusDirectionsMap := make(map[string]struct{})
 	for _, c := range corpusDirections {

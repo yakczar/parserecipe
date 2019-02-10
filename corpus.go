@@ -1,126 +1,557 @@
 package parserecipe
 
-import (
-	"sort"
-	"strings"
-)
-
-func init() {
-	// sort the ingredient corpus by the length of each term
-	ingredientSizes := make(map[string]int)
-	for _, ing := range corpusIngredients {
-		ingredientSizes[ing] = len(ing)
-	}
-
-	pl := make(pairList, len(ingredientSizes))
-	i := 0
-	for k, v := range ingredientSizes {
-		pl[i] = pair{k, v}
-		i++
-	}
-	sort.Slice(pl, func(i, j int) bool {
-		if pl[i].Value == pl[j].Value {
-			return pl[i].Key < pl[j].Key
-		}
-		return pl[i].Value > pl[j].Value
-	})
-
-	corpusIngredients = make([]string, len(pl))
-	for i, p := range pl {
-		corpusIngredients[i] = p.Key
-	}
-
-	// sort corpus measures
-	pl = make(pairList, len(corpusMeasuresMap))
-	i = 0
-	for k := range corpusMeasuresMap {
-		pl[i] = pair{k, len(k)}
-		i++
-	}
-	sort.Slice(pl, func(i, j int) bool {
-		if pl[i].Value == pl[j].Value {
-			return pl[i].Key < pl[j].Key
-		}
-		return pl[i].Value > pl[j].Value
-	})
-	corpusMeasures = make([]string, len(pl))
-	for i, p := range pl {
-		corpusMeasures[i] = p.Key
-	}
-
-	for v := range corpusFractionNumberMap {
-		corpusNumbers = append(corpusNumbers, v)
-	}
-
-	corpusDirectionsMap := make(map[string]struct{})
-	for _, c := range corpusDirections {
-		corpusDirectionsMap[c] = struct{}{}
-	}
-	corpusDirections = make([]string, len(corpusDirectionsMap))
-	i = 0
-	for c := range corpusDirectionsMap {
-		corpusDirections[i] = c
-		i++
-	}
-
-	// make sure each is flanked by space
-	for i, c := range corpusMeasures {
-		corpusMeasures[i] = " " + strings.TrimSpace(c) + " "
-	}
-	for i, c := range corpusIngredients {
-		corpusIngredients[i] = " " + strings.TrimSpace(c) + " "
-	}
-	for i, c := range corpusNumbers {
-		corpusNumbers[i] = " " + strings.TrimSpace(c) + " "
-	}
-}
-
-type pair struct {
-	Key   string
-	Value int
-}
-
-type pairList []pair
-
-func (p pairList) Len() int           { return len(p) }
-func (p pairList) Less(i, j int) bool { return p[i].Value < p[j].Value }
-func (p pairList) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
-
-var corpusNumbers = strings.Split(`1/2
-1/3
-1/4
-1/5
-1/6
-1/7
-1/8
-2/3
-2/5
-2/7
-3/4
-3/8
-4/5
-5/8
-7/8
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20`, "\n")
+var corpusIngredients = []string{" can cream of chicken soup ",
+	" cream of mushroom soup ",
+	" graham cracker crumbs ",
+	" salt and black pepper ",
+	" heavy whipping cream ",
+	" vegetable shortening ",
+	" worcestershire sauce ",
+	" apple cider vinegar ",
+	" confectioners sugar ",
+	" white wine vinegar ",
+	" black peppercorns ",
+	" cream of mushroom ",
+	" green bell pepper ",
+	" italian seasoning ",
+	" mozzarella cheese ",
+	" pumpkin pie spice ",
+	" red pepper flakes ",
+	" vanilla ice cream ",
+	" artichoke hearts ",
+	" balsamic vinegar ",
+	" broccoli florets ",
+	" butternut squash ",
+	" hot pepper sauce ",
+	" jalapeno chilies ",
+	" red wine vinegar ",
+	" american cheese ",
+	" cherry tomatoes ",
+	" chicken breasts ",
+	" cilantro leaves ",
+	" cream of tartar ",
+	" evaporated milk ",
+	" flour tortillas ",
+	" graham crackers ",
+	" lasagna noodles ",
+	" mzarella cheese ",
+	" parmesan cheese ",
+	" pineapple juice ",
+	" red bell pepper ",
+	" salt and pepper ",
+	" vegetable broth ",
+	" vegetable stock ",
+	" water chestnuts ",
+	" yellow cake mix ",
+	" yellow cornmeal ",
+	" almond extract ",
+	" barbecue sauce ",
+	" cayenne pepper ",
+	" cheddar cheese ",
+	" chicken breast ",
+	" chicken thighs ",
+	" corn tortillas ",
+	" cottage cheese ",
+	" dark chocolate ",
+	" dry white wine ",
+	" parsley flakes ",
+	" parsley leaves ",
+	" powdered sugar ",
+	" ricotta cheese ",
+	" seasoning salt ",
+	" smoked paprika ",
+	" sweet potatoes ",
+	" teriyaki sauce ",
+	" whipping cream ",
+	" baking powder ",
+	" chicken broth ",
+	" chicken stock ",
+	" cider vinegar ",
+	" cooking spray ",
+	" dijon mustard ",
+	" garlic powder ",
+	" green chilies ",
+	" green peppers ",
+	" half and half ",
+	" peanut butter ",
+	" plum tomatoes ",
+	" potato starch ",
+	" tabasco sauce ",
+	" vegetable oil ",
+	" whipped cream ",
+	" white vinegar ",
+	" almond flour ",
+	" baby spinach ",
+	" basil leaves ",
+	" black olives ",
+	" black pepper ",
+	" bread crumbs ",
+	" chicken soup ",
+	" chili powder ",
+	" coconut milk ",
+	" corn kernels ",
+	" cream cheese ",
+	" curry powder ",
+	" dry red wine ",
+	" garam masala ",
+	" green onions ",
+	" green pepper ",
+	" kidney beans ",
+	" marshmallows ",
+	" onion powder ",
+	" orange juice ",
+	" purple onion ",
+	" rice vinegar ",
+	" sesame seeds ",
+	" strawberries ",
+	" swiss cheese ",
+	" thyme leaves ",
+	" tomato juice ",
+	" tomato paste ",
+	" tomato sauce ",
+	" walnut flour ",
+	" white pepper ",
+	" yellow onion ",
+	" almond meal ",
+	" almond milk ",
+	" apple juice ",
+	" baking soda ",
+	" bell pepper ",
+	" black beans ",
+	" blue cheese ",
+	" blueberries ",
+	" bread flour ",
+	" breadcrumbs ",
+	" brown sugar ",
+	" cauliflower ",
+	" celery seed ",
+	" chili sauce ",
+	" coconut oil ",
+	" cooking oil ",
+	" corn starch ",
+	" cranberries ",
+	" dry mustard ",
+	" egg noodles ",
+	" feta cheese ",
+	" garlic salt ",
+	" goat cheese ",
+	" green beans ",
+	" green onion ",
+	" heavy cream ",
+	" horseradish ",
+	" lemon juice ",
+	" maple syrup ",
+	" mint leaves ",
+	" orange peel ",
+	" raspberries ",
+	" red peppers ",
+	" rice noodle ",
+	" sweet onion ",
+	" tomato soup ",
+	" white onion ",
+	" applesauce ",
+	" bay leaves ",
+	" beef broth ",
+	" beef stock ",
+	" brown rice ",
+	" buttermilk ",
+	" canola oil ",
+	" corn flour ",
+	" corn syrup ",
+	" cornstarch ",
+	" cumin seed ",
+	" dry sherry ",
+	" fish sauce ",
+	" lemon peel ",
+	" lemon rind ",
+	" lime juice ",
+	" matzo meal ",
+	" mayonnaise ",
+	" peanut oil ",
+	" peppermint ",
+	" prosciutto ",
+	" red pepper ",
+	" rice flour ",
+	" sesame oil ",
+	" shortening ",
+	" sour cream ",
+	" white rice ",
+	" white wine ",
+	" asparagus ",
+	" chickpeas ",
+	" chocolate ",
+	" cool whip ",
+	" coriander ",
+	" dill weed ",
+	" hamburger ",
+	" hazelnuts ",
+	" hot sauce ",
+	" margarine ",
+	" mushrooms ",
+	" oat flour ",
+	" olive oil ",
+	" pie crust ",
+	" pie shell ",
+	" pine nuts ",
+	" pineapple ",
+	" red onion ",
+	" salad oil ",
+	" scallions ",
+	" skim milk ",
+	" soy sauce ",
+	" spaghetti ",
+	" allspice ",
+	" bay leaf ",
+	" broccoli ",
+	" cardamom ",
+	" cherries ",
+	" cilantro ",
+	" cinnamon ",
+	" cornmeal ",
+	" crabmeat ",
+	" cucumber ",
+	" dressing ",
+	" eggplant ",
+	" marjoram ",
+	" molasses ",
+	" potatoes ",
+	" red wine ",
+	" rosemary ",
+	" semolina ",
+	" shallots ",
+	" tarragon ",
+	" tomatoes ",
+	" turmeric ",
+	" zucchini ",
+	" almonds ",
+	" arugula ",
+	" avocado ",
+	" bananas ",
+	" cabbage ",
+	" carrots ",
+	" cashews ",
+	" cayenne ",
+	" chicken ",
+	" coconut ",
+	" gelatin ",
+	" ketchup ",
+	" lettuce ",
+	" mustard ",
+	" oatmeal ",
+	" oranges ",
+	" oregano ",
+	" paprika ",
+	" parsley ",
+	" peaches ",
+	" peanuts ",
+	" pumpkin ",
+	" raisins ",
+	" sausage ",
+	" shallot ",
+	" spinach ",
+	" vanilla ",
+	" vinegar ",
+	" walnuts ",
+	" apples ",
+	" banana ",
+	" brandy ",
+	" butter ",
+	" capers ",
+	" carrot ",
+	" catsup ",
+	" celery ",
+	" cheese ",
+	" chives ",
+	" coffee ",
+	" fennel ",
+	" garlic ",
+	" ginger ",
+	" lemons ",
+	" nutmeg ",
+	" olives ",
+	" onions ",
+	" orange ",
+	" pecans ",
+	" pepper ",
+	" potato ",
+	" quinoa ",
+	" salmon ",
+	" shrimp ",
+	" tomato ",
+	" turkey ",
+	" yogurt ",
+	" apple ",
+	" bacon ",
+	" banana ",
+	" basil ",
+	" beans ",
+	" beets ",
+	" bread ",
+	" chile ",
+	" clove ",
+	" cocoa ",
+	" cream ",
+	" cumin ",
+	" dates ",
+	" flour ",
+	" fruit ",
+	" honey ",
+	" leeks ",
+	" lemon ",
+	" mango ",
+	" onion ",
+	" pasta ",
+	" pears ",
+	" salad ",
+	" salsa ",
+	" sauce ",
+	" spray ",
+	" steak ",
+	" sugar ",
+	" thyme ",
+	" vodka ",
+	" water ",
+	" yeast ",
+	" beef ",
+	" beer ",
+	" corn ",
+	" dill ",
+	" eggs ",
+	" flax ",
+	" kale ",
+	" lamb ",
+	" lime ",
+	" milk ",
+	" mint ",
+	" nuts ",
+	" oats ",
+	" peas ",
+	" pork ",
+	" rice ",
+	" sage ",
+	" salt ",
+	" soda ",
+	" thru ",
+	" tofu ",
+	" tuna ",
+	" ham ",
+	" ice ",
+	" oil "}
+var corpusMeasures = []string{" tablespoons ",
+	" milliliter ",
+	" tablespoon ",
+	" teaspoons ",
+	" teaspoon ",
+	" canned ",
+	" ounces ",
+	" pounds ",
+	" quarts ",
+	" grams ",
+	" ounce ",
+	" pints ",
+	" pound ",
+	" quart ",
+	" tbsps ",
+	" cans ",
+	" cups ",
+	" gram ",
+	" pint ",
+	" tbsp ",
+	" tsps ",
+	" can ",
+	" cup ",
+	" tbl ",
+	" tsp ",
+	" ml ",
+	" oz ",
+	" c ",
+	" g "}
+var corpusNumbers = []string{" 1/2 ",
+	" 1/3 ",
+	" 1/4 ",
+	" 1/5 ",
+	" 1/6 ",
+	" 1/7 ",
+	" 1/8 ",
+	" 2/3 ",
+	" 2/5 ",
+	" 2/7 ",
+	" 3/4 ",
+	" 3/8 ",
+	" 4/5 ",
+	" 5/8 ",
+	" 7/8 ",
+	" 1 ",
+	" 2 ",
+	" 3 ",
+	" 4 ",
+	" 5 ",
+	" 6 ",
+	" 7 ",
+	" 8 ",
+	" 9 ",
+	" 10 ",
+	" 11 ",
+	" 12 ",
+	" 13 ",
+	" 14 ",
+	" 15 ",
+	" 16 ",
+	" 17 ",
+	" 18 ",
+	" 19 ",
+	" 20 ",
+	" ½ ",
+	" ¾ ",
+	" ⅜ ",
+	" ⅞ ",
+	" ¼ ",
+	" ⅛ ",
+	" ⅝ ",
+	" ⅔ ",
+	" ⅓ "}
+var corpusDirections = []string{"with",
+	"transfer",
+	"half",
+	"into",
+	"raisins",
+	"distributed",
+	"well",
+	"1",
+	"salted",
+	"touch",
+	"lasagna",
+	"10",
+	"cold",
+	"to",
+	"9x13",
+	"¼",
+	"spray",
+	"does",
+	"before",
+	"over",
+	"nuts",
+	"eggs",
+	"pans",
+	"prevent",
+	"not",
+	"spread",
+	"layers",
+	"15",
+	"sugar",
+	"bowl",
+	"boiling",
+	"bake",
+	"additional",
+	"browned",
+	"2",
+	"combine",
+	"oats",
+	"achieve",
+	"for",
+	"pot",
+	"drain",
+	"remaining",
+	"either",
+	"mixing",
+	"dish",
+	"make",
+	"tablespoons",
+	"spoon",
+	"foil",
+	"medium",
+	"season",
+	"tablespoon",
+	"remove",
+	"coconut",
+	"bring",
+	"slices",
+	"sure",
+	"cool",
+	"or",
+	"oven",
+	"cook",
+	"occasionally",
+	"noodles",
+	"an",
+	"lengthwise",
+	"pepper",
+	"parsley",
+	"arrange",
+	"hours",
+	"serving",
+	"sausage",
+	"ricotta",
+	"bottom",
+	"cup",
+	"dutch",
+	"water",
+	"½",
+	"brown",
+	"boil",
+	"sheet",
+	"preheated",
+	"evenly",
+	"ground",
+	"beef",
+	"onion",
+	"seeds",
+	"cheese",
+	"375",
+	"minutes",
+	"baking",
+	"a",
+	"tomatoes",
+	"fennel",
+	"italian",
+	"covered",
+	"the",
+	"25",
+	"garlic",
+	"paste",
+	"color",
+	"preheat",
+	"inch",
+	"sprinkle",
+	"sticking",
+	"and",
+	"seasoning",
+	"degrees",
+	"meat",
+	"parmesan",
+	"repeat",
+	"basil",
+	"about",
+	"salt",
+	"even",
+	"add",
+	"tomato",
+	"sauce",
+	"top",
+	"crushed",
+	"mixture",
+	"third",
+	"until",
+	"stir",
+	"6",
+	"cover",
+	"large",
+	"of",
+	"rinse",
+	"assemble",
+	"mozzarella",
+	"from",
+	"lightly",
+	"teaspoon",
+	"cups",
+	"in",
+	"heat",
+	"simmer",
+	"stirring",
+	"mix",
+	"8",
+	"f",
+	"cooking"}
 
 type fractionNumber struct {
 	fractionString string
@@ -128,630 +559,45 @@ type fractionNumber struct {
 }
 
 var corpusFractionNumberMap = map[string]fractionNumber{
-	"½": fractionNumber{"1/2", 1.0 / 2},
-	"¼": fractionNumber{"1/4", 1.0 / 4},
-	"¾": fractionNumber{"3/4", 3.0 / 4},
-	"⅛": fractionNumber{"1/8", 1.0 / 8},
-	"⅜": fractionNumber{"3/8", 3.0 / 8},
-	"⅝": fractionNumber{"5/8", 5.0 / 8},
-	"⅞": fractionNumber{"7/8", 7.0 / 8},
-	"⅔": fractionNumber{"2/3", 2.0 / 3},
-	"⅓": fractionNumber{"1/3", 1.0 / 3},
+	"½": {"1/2", 0.5000000000},
+	"¾": {"3/4", 0.7500000000},
+	"⅜": {"3/8", 0.3750000000},
+	"⅞": {"7/8", 0.8750000000},
+	"¼": {"1/4", 0.2500000000},
+	"⅛": {"1/8", 0.1250000000},
+	"⅝": {"5/8", 0.6250000000},
+	"⅔": {"2/3", 0.6666666667},
+	"⅓": {"1/3", 0.3333333333},
 }
 
-var corpusIngredients = strings.Split(`salt
-sugar
-butter
-garlic
-water
-olive oil
-flour
-powdered sugar
-milk
-flour
-onion
-pepper
-onions
-brown sugar
-eggs
-cinnamon
-baking powder
-lemon juice
-matzo meal
-tomatoes
-vanilla
-parsley
-baking soda
-sour cream
-vegetable oil
-celery
-ginger
-lemon
-cream cheese
-carrots
-cheddar cheese
-beef
-potatoes
-oil
-honey
-nutmeg
-cheese
-soy sauce
-mayonnaise
-chicken broth
-oregano
-cumin
-thyme
-garlic powder
-mushrooms
-cilantro
-basil
-pecans
-bacon
-heavy cream
-chicken breasts
-worcestershire sauce
-paprika
-chocolate
-chicken
-flax
-walnuts
-walnut flour
-dark chocolate
-chili powder
-almonds
-lime juice
-parmesan cheese
-pineapple
-rice
-orange juice
-green pepper
-raisins
-coconut
-cayenne pepper
-nuts
-dijon mustard
-cornstarch
-mozzarella cheese
-buttermilk
-vinegar
-apples
-red pepper
-tomato sauce
-bread crumbs
-steak
-oats
-spinach
-shortening
-red pepper flakes
-shallots
-tomato paste
-red bell pepper
-lime
-shrimp
-semolina
-zucchini
-strawberries
-rosemary
-canola oil
-green onions
-bananas
-scallions
-mustard
-chicken stock
-chives
-whipping cream
-maple syrup
-orange
-corn flour
-corn starch
-balsamic vinegar
-dry white wine
-coriander
-bay leaf
-ketchup
-yogurt
-red wine vinegar
-avocado
-sesame oil
-cabbage
-bay leaves
-broccoli
-chicken breast
-cocoa
-carrot
-basil leaves
-onion powder
-cucumber
-peanut butter
-allspice
-dry mustard
-cranberries
-mint
-ham
-green bell pepper
-blueberries
-soda
-peas
-curry powder
-corn
-coconut milk
-lettuce
-white pepper
-sesame seeds
-pork
-turmeric
-pasta
-dill
-yellow onion
-white wine
-red onion
-jalapeno chilies
-cream of mushroom
-beans
-almond flour
-almond extract
-black beans
-garlic salt
-peanuts
-cider vinegar
-white vinegar
-margarine
-green beans
-cream
-molasses
-pumpkin
-coconut oil
-rice noodle
-rice flour
-turkey
-yeast
-olives
-corn syrup
-sage
-rice vinegar
-raspberries
-beef broth
-ricotta cheese
-salsa
-tomato
-spray
-cilantro leaves
-parsley leaves
-apple cider vinegar
-capers
-bell pepper
-gelatin
-green chilies
-black olives
-feta cheese
-swiss cheese
-cherry tomatoes
-potato
-potato starch
-oranges
-cool whip
-cream of tartar
-cornmeal
-pineapple juice
-italian seasoning
-cherries
-cauliflower
-white wine vinegar
-whipped cream
-applesauce
-asparagus
-thyme leaves
-salmon
-cooking oil
-cayenne
-flour tortillas
-dates
-leeks
-purple onion
-green onion
-mint leaves
-dressing
-skim milk
-mango
-graham cracker crumbs
-fish sauce
-peanut oil
-red wine
-cottage cheese
-salad oil
-heavy whipping cream
-tuna
-apple
-sausage
-vanilla ice cream
-cooking spray
-eggplant
-plum tomatoes
-tarragon
-thru
-peaches
-goat cheese
-kidney beans
-tofu
-corn tortillas
-chickpeas
-vegetable broth
-celery seed
-shallot
-clove
-chicken soup
-spaghetti
-lemon peel
-black peppercorns
-peppermint
-banana
-hamburger
-cardamom
-catsup
-brandy
-salad
-horseradish
-vodka
-sweet potatoes
-beer
-coffee
-butternut squash
-white onion
-smoked paprika
-apple juice
-chile
-pie shell
-pumpkin pie spice
-lemons
-vegetable stock
-egg noodles
-broccoli florets
-pine nuts
-sweet onion
-pears
-brown rice
-parsley flakes
-red peppers
-quinoa
-hot pepper sauce
-tomato soup
-dry sherry
-blue cheese
-arugula
-dry red wine
-corn kernels
-hot sauce
-green peppers
-cumin seed
-barbecue sauce
-artichoke hearts
-water chestnuts
-lemon rind
-chili sauce
-tabasco sauce
-beef stock
-orange peel
-marshmallows
-kale
-bread flour
-vegetable shortening
-american cheese
-dill weed
-fruit
-white rice
-hazelnuts
-crabmeat
-pie crust
-beets
-almond milk
-almond meal
-oat flour
-marjoram
-baby spinach
-graham crackers
-prosciutto
-fennel
-tomato juice
-evaporated milk
-parmesan cheese
-yellow cornmeal
-seasoning salt
-garam masala
-lamb
-evaporated milk
-salt
-sugar
-butter
-garlic
-water
-olive oil
-milk
-flour
-onion
-pepper
-onions
-black pepper
-brown sugar
-eggs
-cinnamon
-baking powder
-lemon juice
-tomatoes
-vanilla
-parsley
-baking soda
-sour cream
-vegetable oil
-celery
-ginger
-lemon
-cream cheese
-carrots
-cheddar cheese
-beef
-potatoes
-oil
-honey
-nutmeg
-cheese
-soy sauce
-mayonnaise
-chicken broth
-oregano
-cumin
-thyme
-garlic powder
-salt and pepper
-mushrooms
-cilantro
-basil
-pecans
-bacon
-heavy cream
-chicken breasts
-worcestershire sauce
-paprika
-chocolate
-chicken
-walnuts
-chili powder
-almonds
-lime juice
-parmesan cheese
-pineapple
-rice
-orange juice
-green pepper
-raisins
-coconut
-cayenne pepper
-nuts
-dijon mustard
-cornstarch
-mzarella cheese
-buttermilk
-vinegar
-apples
-red pepper
-tomato sauce
-bread crumbs
-oats
-spinach
-shortening
-red pepper flakes
-shallots
-tomato paste
-red bell pepper
-lime
-shrimp
-semolina
-zucchini
-strawberries
-rosemary
-canola oil
-green onions
-bananas
-scallions
-mustard
-chicken stock
-chives
-whipping cream
-bread
-maple syrup
-orange
-corn starch
-balsamic vinegar
-dry white wine
-coriander
-bay leaf
-ketchup
-yogurt
-red wine vinegar
-avocado
-sesame oil
-cabbage
-bay leaves
-broccoli
-salt and black pepper
-chicken breast
-cocoa
-carrot
-basil leaves
-onion powder
-cucumber
-peanut butter
-allspice
-dry mustard
-cranberries
-mint
-ham
-green bell pepper
-blueberries
-soda
-peas
-curry powder
-corn
-coconut milk
-lettuce
-white pepper
-sesame seeds
-pork
-turmeric
-pasta
-dill
-yellow onion
-white wine
-red onion
-jalapeno chilies
-cream of mushroom soup
-beans
-almond extract
-black beans
-garlic salt
-peanuts
-cider vinegar
-white vinegar
-margarine
-green beans
-cream
-molasses
-confectioners sugar
-pumpkin
-coconut oil
-sauce
-turkey
-yeast
-olives
-corn syrup
-sage
-rice vinegar
-raspberries
-beef broth
-salt and pepper
-ricotta cheese
-salsa
-tomato
-breadcrumbs
-spray
-cilantro leaves
-parsley leaves
-apple cider vinegar
-capers
-bell pepper
-gelatin
-green chilies
-black olives
-feta cheese
-swiss cheese
-cherry tomatoes
-potato
-oranges
-cool whip
-cream of tartar
-cornmeal
-pineapple juice
-italian seasoning
-cherries
-cauliflower
-white wine vinegar
-whipped cream
-applesauce
-asparagus
-thyme leaves
-salmon
-cooking oil
-cayenne
-flour tortillas
-dates
-leeks
-purple onion
-green onion
-mint leaves
-dressing
-skim milk
-oatmeal
-mango
-graham cracker crumbs
-fish sauce
-peanut oil
-red wine
-cottage cheese
-salad oil
-heavy whipping cream
-tuna
-apple
-sausage
-vanilla ice cream
-cooking spray
-eggplant
-plum tomatoes
-tarragon
-thru
-peaches
-goat cheese
-ice
-kidney beans
-mozzarella cheese
-can cream of chicken soup
-chicken thighs
-tofu
-corn tortillas
-chickpeas
-vegetable broth
-lasagna noodles
-celery seed
-shallot
-teriyaki sauce
-clove
-chicken soup
-spaghetti
-lemon peel
-black peppercorns
-half and half
-cashews
-raisins
-onion
-yellow cake mix
-banana`, "\n")
-
-var corpusMeasures []string
-
 var corpusMeasuresMap = map[string]string{
-	"tablespoon":  "tbl",
 	"tablespoons": "tbl",
-	"tbl":         "tbl",
-	"tbsp":        "tbl",
-	"tbsps":       "tbl",
-	"teaspoons":   "tsp",
 	"teaspoon":    "tsp",
 	"tsp":         "tsp",
-	"tsps":        "tsp",
-	"cups":        "cup",
-	"cup":         "cup",
-	"c":           "cup",
-	"ounces":      "ounce",
-	"ounce":       "ounce",
 	"oz":          "ounce",
+	"tbl":         "tbl",
+	"milliliter":  "milliliter",
+	"cups":        "cup",
+	"ounce":       "ounce",
+	"quarts":      "quart",
+	"c":           "cup",
+	"quart":       "quart",
+	"can":         "can",
+	"teaspoons":   "tsp",
+	"ounces":      "ounce",
+	"gram":        "gram",
+	"ml":          "milliliter",
+	"pints":       "pint",
+	"tablespoon":  "tbl",
 	"grams":       "gram",
 	"g":           "gram",
-	"gram":        "gram",
-	"milliliter":  "milliliter",
-	"ml":          "milliliter",
+	"tbsps":       "tbl",
+	"tsps":        "tsp",
 	"pint":        "pint",
-	"pints":       "pint",
-	"quart":       "quart",
-	"quarts":      "quart",
+	"canned":      "can",
+	"tbsp":        "tbl",
+	"cup":         "cup",
 	"pound":       "pound",
 	"pounds":      "pound",
 	"cans":        "can",
-	"canned":      "can",
-	"can":         "can",
 }
-
-var corpusDirections = strings.Fields(` in a dutch oven cook sausage ground beef onion and garlic over medium heat until well browned stir in crushed tomatoes tomato paste tomato sauce and water season with sugar basil fennel seeds italian seasoning 1 tablespoon salt pepper and 2 tablespoons parsley simmer covered for about 1 ½ hours stirring occasionally in a large bowl combine the oats nuts coconut and brown sugar 
-bring a large pot of lightly salted water to a boil cook lasagna noodles in boiling water for 8 to 10 minutes drain noodles and rinse with cold water in a mixing bowl combine ricotta cheese with eggs remaining parsley and ½ teaspoon salt 
-preheat oven to 375 degrees f combine sheet pans stirring achieve an even color large bowl transfer remove oven mix
-to assemble spread 1 ½ cups of meat sauce in the bottom of a 9x13 inch baking dish arrange 6 noodles lengthwise over meat sauce spread with 1 half of the ricotta cheese mixture top with a third of mozzarella cheese slices spoon 1 ½ cups meat sauce over mozzarella and sprinkle with ¼ cup parmesan cheese repeat layers and top with remaining mozzarella and parmesan cheese cover with foil to prevent sticking either spray foil with cooking spray or make sure the foil does not touch the cheese 
-bake in preheated oven for 25 minutes remove foil and bake an additional 25 minutes cool for 15 minutes before serving remove from oven and transfer into a large bowl add raisins and mix until evenly distributed
-`)
