@@ -116,6 +116,7 @@ type Recipe struct {
 	FileName    string
 	FileContent string
 	Lines       []LineInfo
+	Directions  []string
 }
 
 func NewFromFile(fname string) (r *Recipe, err error) {
@@ -158,7 +159,7 @@ type IngredientList struct {
 	Ingredients []Ingredient
 }
 
-func ParseDirections(lis []LineInfo) (rerr error) {
+func (r *Recipe) ParseDirections(lis []LineInfo) (rerr error) {
 	log.Debug(len(lis))
 	scores := make([]float64, len(lis))
 	for i, li := range lis {
@@ -188,6 +189,7 @@ func ParseDirections(lis []LineInfo) (rerr error) {
 	start, end := GetBestTopHatPositions(scores)
 	log.Debugf("direction are from line %d to %d", start, end)
 	directionI := 1
+	r.Directions = []string{}
 	for i := start; i <= end; i++ {
 		if len(strings.TrimSpace(lis[i].Line)) == 0 {
 			continue
@@ -202,6 +204,7 @@ func ParseDirections(lis []LineInfo) (rerr error) {
 		}
 		log.Debugf("%d) %s", directionI, direction)
 		directionI++
+		r.Directions = append(r.Directions, direction)
 	}
 	return
 }
@@ -287,7 +290,7 @@ func (r *Recipe) Parse() (rerr error) {
 
 	start, end := GetBestTopHatPositions(scores)
 
-	ParseDirections(lineInfos[end:])
+	r.ParseDirections(lineInfos[end:])
 
 	r.Lines = []LineInfo{}
 	for _, lineInfo := range lineInfos[start-3 : end+3] {
