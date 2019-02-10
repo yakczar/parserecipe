@@ -130,6 +130,8 @@ type Recipe struct {
 	FileContent string
 	Lines       []LineInfo
 	Directions  []string
+	Ingredients []Ingredient
+	Ratios      map[string]map[string]float64
 }
 
 // NewFromFile generates a new parser from a file
@@ -386,10 +388,59 @@ func (r *Recipe) Parse() (rerr error) {
 
 		r.Lines = append(r.Lines, lineInfo)
 	}
+	rerr = r.ConvertIngredients()
+	if rerr != nil {
+		return
+	}
+
+	// consolidate ingredients
+	ingredients := make(map[string]Ingredient)
+	ingredientList := []string{}
+	for _, line := range r.Lines {
+		if _, ok := ingredients[line.Ingredient.Name]; ok {
+			if ingredients[line.Ingredient.Name].Measure.Name == line.Ingredient.Measure.Name {
+				ingredients[line.Ingredient.Name] = Ingredient{
+					Name:    line.Ingredient.Name,
+					Comment: ingredients[line.Ingredient.Name].Comment,
+					Measure: Measure{
+						Name:   ingredients[line.Ingredient.Name].Measure.Name,
+						Amount: ingredients[line.Ingredient.Name].Measure.Amount + line.Ingredient.Measure.Amount,
+						Cups:   ingredients[line.Ingredient.Name].Measure.Cups + line.Ingredient.Measure.Cups,
+					},
+				}
+			} else {
+				ingredients[line.Ingredient.Name] = Ingredient{
+					Name:    line.Ingredient.Name,
+					Comment: ingredients[line.Ingredient.Name].Comment,
+					Measure: Measure{
+						Name:   ingredients[line.Ingredient.Name].Measure.Name,
+						Amount: ingredients[line.Ingredient.Name].Measure.Amount,
+						Cups:   ingredients[line.Ingredient.Name].Measure.Cups + line.Ingredient.Measure.Cups,
+					},
+				}
+				log.Debugf("different measure!")
+			}
+		} else {
+			ingredientList = append(ingredientList, line.Ingredient.Name)
+			ingredients[line.Ingredient.Name] = Ingredient{
+				Name:    line.Ingredient.Name,
+				Comment: line.Ingredient.Comment,
+				Measure: Measure{
+					Name:   line.Ingredient.Measure.Name,
+					Amount: line.Ingredient.Measure.Amount,
+					Cups:   line.Ingredient.Measure.Cups + line.Ingredient.Measure.Cups,
+				},
+			}
+		}
+	}
+	r.Ingredients = make([]Ingredient, len(ingredients))
+	for i, ing := range ingredientList {
+		r.Ingredients[i] = ingredients[ing]
+	}
+
 	wg.Done()
 	wg.Wait()
 
-	rerr = r.ConvertIngredients()
 	return
 }
 
@@ -620,4 +671,24 @@ func parseDecimal(s string) (r rational, err error) {
 		r.n *= sign
 	}
 	return r, nil
+}
+
+// Analyze will determine the ratios between all the normalized ingredients
+func (r *Recipe) Analyze() (err error) {
+	r.Ratios = make(map[string]map[string]float64)
+	for _, ing1 := range r.Ingredients {
+		r.Ratios[ing1.Name] = make(map[string]float64)
+		for _, ing2 := range r.Ingredients {
+			if ing1.Name >= ing2.Name {
+				continue
+			}
+			r.Ratios[ing1.Name][ing2.Name] = ing1.Measure.Cups / ing2.Measure.Cups
+		}
+	}
+	return
+}
+
+// DistanceTo returns the distance between the recipes
+func (r *Recipe) DistanceTo(r2 Recipe) (distnace float64, err error) {
+	return
 }

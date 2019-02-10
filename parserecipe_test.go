@@ -119,3 +119,16 @@ func TestNormalize(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 3.5, cups)
 }
+
+func TestAnalyze(t *testing.T) {
+	log.SetLevel(logrus.ErrorLevel)
+	recipes := []string{"testing/sites/pancakes.html", "testing/sites/pancakes2.html", "testing/sites/pancakes3.html"}
+	var r [3]*Recipe
+	for i := 0; i < len(recipes); i++ {
+		r[i], _ = NewFromFile(recipes[i])
+		assert.Nil(t, r[i].Parse())
+		r[i].Analyze()
+		fmt.Println(r[i].Ratios["eggs"])
+	}
+
+}
