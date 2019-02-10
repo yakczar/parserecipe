@@ -174,6 +174,11 @@ func ParseDirections(lis []LineInfo) (rerr error) {
 				score++
 			}
 		}
+		for _, corpusDirection := range corpusDirectionsNeg {
+			if strings.Contains(li.Line, corpusDirection) {
+				score--
+			}
+		}
 		if len(li.Line) < 5 {
 			score = 0
 		}

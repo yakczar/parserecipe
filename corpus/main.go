@@ -91,7 +91,7 @@ func main() {
 	corpusDirections := strings.Fields(string(b))
 	corpusDirectionsMap := make(map[string]struct{})
 	for _, c := range corpusDirections {
-		corpusDirectionsMap[strings.ToLower(c)] = struct{}{}
+		corpusDirectionsMap[" "+strings.ToLower(c)+" "] = struct{}{}
 	}
 	pl = make(pairList, len(corpusDirectionsMap))
 	i = 0
@@ -107,6 +107,29 @@ func main() {
 		corpusDirections[i] = p.Key
 	}
 	f.WriteString(`var corpusDirections = []string{"` + strings.Join(corpusDirections, `"`+",\n"+`"`) + `"}` + "\n")
+	f.Sync()
+
+	// MAKE DIRECTIONS NEG CORPUS
+	b, err = ioutil.ReadFile("corpus/directions_neg.txt")
+	corpusDirections = strings.Fields(string(b))
+	corpusDirectionsMap = make(map[string]struct{})
+	for _, c := range corpusDirections {
+		corpusDirectionsMap[" "+strings.ToLower(c)+" "] = struct{}{}
+	}
+	pl = make(pairList, len(corpusDirectionsMap))
+	i = 0
+	for k := range corpusDirectionsMap {
+		pl[i] = pair{k, len(k)}
+		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		return pl[i].Key < pl[j].Key
+	})
+	corpusDirections = make([]string, len(pl))
+	for i, p := range pl {
+		corpusDirections[i] = p.Key
+	}
+	f.WriteString(`var corpusDirectionsNeg = []string{"` + strings.Join(corpusDirections, `"`+",\n"+`"`) + `"}` + "\n")
 	f.Sync()
 
 	f.WriteString(`type fractionNumber struct {
