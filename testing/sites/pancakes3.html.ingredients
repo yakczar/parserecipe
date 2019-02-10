@@ -1,0 +1,60 @@
+{
+ "Ingredients": [
+  {
+   "Name": "flour",
+   "Measure": {
+    "Amount": 2,
+    "Name": "cups",
+    "Cups": 2
+   }
+  },
+  {
+   "Name": "sugar",
+   "Measure": {
+    "Amount": 3,
+    "Name": "tablespoons",
+    "Cups": 0.1875
+   }
+  },
+  {
+   "Name": "salt",
+   "Measure": {
+    "Amount": 0.5,
+    "Name": "teaspoon",
+    "Cups": 0.0104165
+   }
+  },
+  {
+   "Name": "baking powder",
+   "Measure": {
+    "Amount": 1,
+    "Name": "tablespoon",
+    "Cups": 0.0625
+   }
+  },
+  {
+   "Name": "eggs",
+   "Measure": {
+    "Amount": 2,
+    "Name": "whole",
+    "Cups": 0.5
+   }
+  },
+  {
+   "Name": "butter",
+   "Measure": {
+    "Amount": 0.25,
+    "Name": "cup",
+    "Cups": 0.25
+   }
+  },
+  {
+   "Name": "milk",
+   "Measure": {
+    "Amount": 1.75,
+    "Name": "cups",
+    "Cups": 1.75
+   }
+  }
+ ]
+}
