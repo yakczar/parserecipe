@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -21,11 +22,87 @@ func main() {
 
 	f.WriteString("package parserecipe\n")
 
+	var b []byte
+	var pl pairList
+	var i int
+
+	// MAKE HERBS
+	var herbList []string
+	b, err = ioutil.ReadFile("corpus/herbs.json")
+	if err != nil {
+		panic(err)
+	}
+	if json.Unmarshal(b, &herbList) != nil {
+		panic("could not unmarshal")
+	}
+	f.WriteString(`var herbMap = map[string]struct{}{` + "\n")
+	pl = make(pairList, len(herbList))
+	i = 0
+	for _, k := range herbList {
+		pl[i] = pair{k, len(k)}
+		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		return pl[i].Key < pl[j].Key
+	})
+	for _, p := range pl {
+		f.WriteString(fmt.Sprintf(`"%s": {},`, p.Key) + "\n")
+	}
+	f.WriteString("}\n\n")
+
+	// MAKE FRUITS
+	var fruitList []string
+	b, err = ioutil.ReadFile("corpus/fruits.json")
+	if err != nil {
+		panic(err)
+	}
+	if json.Unmarshal(b, &fruitList) != nil {
+		panic("could not unmarshal")
+	}
+	f.WriteString(`var fruitMap = map[string]struct{}{` + "\n")
+	pl = make(pairList, len(fruitList))
+	i = 0
+	for _, k := range fruitList {
+		pl[i] = pair{k, len(k)}
+		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		return pl[i].Key < pl[j].Key
+	})
+	for _, p := range pl {
+		f.WriteString(fmt.Sprintf(`"%s": {},`, p.Key) + "\n")
+	}
+	f.WriteString("}\n\n")
+
+	// MAKE VEGETABLES
+	var vegetableList []string
+	b, err = ioutil.ReadFile("corpus/vegetables.json")
+	if err != nil {
+		panic(err)
+	}
+	if json.Unmarshal(b, &vegetableList) != nil {
+		panic("could not unmarshal")
+	}
+	f.WriteString(`var vegetableMap = map[string]struct{}{` + "\n")
+	pl = make(pairList, len(vegetableList))
+	i = 0
+	for _, k := range vegetableList {
+		pl[i] = pair{k, len(k)}
+		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		return pl[i].Key < pl[j].Key
+	})
+	for _, p := range pl {
+		f.WriteString(fmt.Sprintf(`"%s": {},`, p.Key) + "\n")
+	}
+	f.WriteString("}\n\n")
+
 	// MAIN INGREDIENT LIST
 	// sort the ingredient corpus by the length of each term
 	// and then by alphabetizing
-	bIngredients, err := ioutil.ReadFile("corpus/ingredients.txt")
-	corpusIngredients := strings.Split(string(bIngredients), "\n")
+	b, err = ioutil.ReadFile("corpus/ingredients.txt")
+	corpusIngredients := strings.Split(string(b), "\n")
 	ingredientSizes := make(map[string]int)
 	for _, ing := range corpusIngredients {
 		if len(ing) == 0 {
@@ -33,9 +110,27 @@ func main() {
 		}
 		ingredientSizes[ing] = len(ing)
 	}
+	for _, ing := range fruitList {
+		if len(ing) == 0 {
+			continue
+		}
+		ingredientSizes[ing] = len(ing)
+	}
+	for _, ing := range herbList {
+		if len(ing) == 0 {
+			continue
+		}
+		ingredientSizes[ing] = len(ing)
+	}
+	for _, ing := range vegetableList {
+		if len(ing) == 0 {
+			continue
+		}
+		ingredientSizes[ing] = len(ing)
+	}
 
-	pl := make(pairList, len(ingredientSizes))
-	i := 0
+	pl = make(pairList, len(ingredientSizes))
+	i = 0
 	for k, v := range ingredientSizes {
 		pl[i] = pair{k, v}
 		i++
@@ -75,7 +170,7 @@ func main() {
 	f.Sync()
 
 	// MAKE NUMBERS
-	b, err := ioutil.ReadFile("corpus/numbers.txt")
+	b, err = ioutil.ReadFile("corpus/numbers.txt")
 	corpusNumbers := strings.Split(string(b), "\n")
 	for v := range corpusFractionNumberMap {
 		corpusNumbers = append(corpusNumbers, v)
@@ -164,6 +259,30 @@ func main() {
 	})
 	for _, p := range pl {
 		f.WriteString(fmt.Sprintf(`"%s": "%s",`, p.Key, corpusMeasuresMap[p.Key]) + "\n")
+	}
+	f.WriteString("}\n\n")
+
+	// MAKE DENSITIES
+	var densities map[string]float64
+	b, err = ioutil.ReadFile("corpus/densities.json")
+	if err != nil {
+		panic(err)
+	}
+	if json.Unmarshal(b, &densities) != nil {
+		panic("could not unmarshal")
+	}
+	f.WriteString(`var densities = map[string]float64{` + "\n")
+	pl = make(pairList, len(densities))
+	i = 0
+	for k := range densities {
+		pl[i] = pair{k, len(k)}
+		i++
+	}
+	sort.Slice(pl, func(i, j int) bool {
+		return pl[i].Key < pl[j].Key
+	})
+	for _, p := range pl {
+		f.WriteString(fmt.Sprintf(`"%s": %2.10f,`, p.Key, densities[p.Key]) + "\n")
 	}
 	f.WriteString("}\n\n")
 

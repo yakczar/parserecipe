@@ -3,38 +3,43 @@
   {
    "Name": "salmon",
    "Comment": "skinned",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 10,
-    "Name": "ounce"
+    "Name": "ounce",
+    "Cups": 1.6016666666666668
    }
   },
   {
    "Name": "coriander",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   },
   {
    "Name": "cumin seed",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.5,
-    "Name": "teaspoons"
+    "Name": "teaspoons",
+    "Cups": 0.0312495
    }
   },
   {
    "Name": "nutmeg",
    "Comment": "freshly grated",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.020833
    }
   },
   {
    "Name": "peanut oil",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "tablespoons"
+    "Name": "tablespoons",
+    "Cups": 0.125
    }
   }
  ]

@@ -2,60 +2,68 @@
  "Ingredients": [
   {
    "Name": "flour",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 2
    }
   },
   {
    "Name": "baking soda",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.020833
    }
   },
   {
    "Name": "salt",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.0104165
    }
   },
   {
    "Name": "canola oil",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.3333333333333333,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.3333333333333333
    }
   },
   {
    "Name": "sugar",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 1
    }
   },
   {
    "Name": "eggs",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0.5
    }
   },
   {
    "Name": "banana",
    "Comment": "mashed",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.3333333333333333,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 1.3333333333333333
    }
   },
   {
    "Name": "chocolate",
    "Comment": "mini",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.6666666666666666,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.6666666666666666
    }
   }
  ]

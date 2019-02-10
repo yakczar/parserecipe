@@ -3,69 +3,78 @@
   {
    "Name": "oats",
    "Comment": "rolled",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 3,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 3
    }
   },
   {
    "Name": "almonds",
    "Comment": "slivered",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 1
    }
   },
   {
    "Name": "cashews",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 1
    }
   },
   {
    "Name": "coconut",
    "Comment": "shredded sweet",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.75,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.75
    }
   },
   {
    "Name": "brown sugar",
    "Comment": "plus 2 tablespoons dark",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.25
    }
   },
   {
    "Name": "maple syrup",
    "Comment": "plus 2 tablespoons",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.25
    }
   },
   {
    "Name": "vegetable oil",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.25
    }
   },
   {
    "Name": "salt",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.75,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.01562475
    }
   },
   {
    "Name": "raisins",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 1
    }
   }
  ]

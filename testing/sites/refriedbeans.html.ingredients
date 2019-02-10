@@ -2,85 +2,96 @@
  "Ingredients": [
   {
    "Name": "beans",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 4,
-    "Name": "canned"
+    "Name": "canned",
+    "Cups": 7
    }
   },
   {
    "Name": "olive oil",
    "Comment": "extra virgin",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   },
   {
    "Name": "white onion",
    "Comment": "finely chopped yellow or",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "salt",
    "Comment": "fine sea",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.00520825
    }
   },
   {
    "Name": "garlic",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0.0561666
    }
   },
   {
    "Name": "chili powder",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.0104165
    }
   },
   {
    "Name": "cumin",
    "Comment": "ground",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.00520825
    }
   },
   {
    "Name": "beans",
    "Comment": "pinto",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "cans"
+    "Name": "cans",
+    "Cups": 3.5
    }
   },
   {
    "Name": "water",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "cilantro",
    "Comment": "chopped fresh",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "tablespoons"
+    "Name": "tablespoons",
+    "Cups": 0.125
    }
   },
   {
    "Name": "lime juice",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   }
  ]

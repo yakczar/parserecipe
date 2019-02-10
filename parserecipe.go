@@ -144,16 +144,15 @@ func NewFromURL(url string) (r *Recipe, err error) {
 }
 
 type Ingredient struct {
-	Name              string   `json:",omitempty"`
-	Comment           string   `json:",omitempty"`
-	MeasureOriginal   *Measure `json:",omitempty"`
-	MeasureConverted  *Measure `json:",omitempty"`
-	MeasureNormalized *Measure `json:",omitempty"`
+	Name    string  `json:",omitempty"`
+	Comment string  `json:",omitempty"`
+	Measure Measure `json:",omitempty"`
 }
 
 type Measure struct {
 	Amount float64
 	Name   string
+	Cups   float64
 }
 
 type IngredientList struct {
@@ -307,7 +306,7 @@ func (r *Recipe) Parse() (rerr error) {
 			continue
 		}
 
-		lineInfo.Ingredient.MeasureOriginal = &Measure{}
+		lineInfo.Ingredient.Measure = Measure{}
 
 		// get amount, continue if there is an error
 		err := lineInfo.getTotalAmount()
@@ -340,9 +339,21 @@ func (r *Recipe) Parse() (rerr error) {
 			lineInfo.Ingredient.Comment = GetOtherInBetweenPositions(lineInfo.Line, lineInfo.MeasureInString[0], lineInfo.IngredientsInString[0])
 		}
 
+		// normalize into cups
+		lineInfo.Ingredient.Measure.Cups, err = normalizeIngredient(
+			lineInfo.Ingredient.Name,
+			lineInfo.Ingredient.Measure.Name,
+			lineInfo.Ingredient.Measure.Amount,
+		)
+		if err != nil {
+			log.WithFields(logrus.Fields{
+				"line": strings.TrimSpace(lineInfo.LineOriginal),
+			}).Debugf("can't convert to cups: %s", err.Error())
+		}
+
 		log.WithFields(logrus.Fields{
 			"line": strings.TrimSpace(lineInfo.LineOriginal),
-		}).Debugf("%s (%s): %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.Comment, lineInfo.Ingredient.MeasureOriginal)
+		}).Debugf("%s (%s): %+v", lineInfo.Ingredient.Name, lineInfo.Ingredient.Comment, lineInfo.Ingredient.Measure)
 
 		r.Lines = append(r.Lines, lineInfo)
 	}
@@ -361,7 +372,7 @@ func (r *Recipe) ConvertIngredients() (err error) {
 func (r *Recipe) PrintIngredientList() string {
 	s := ""
 	for _, li := range r.Lines {
-		s += fmt.Sprintf("%s %s %s\n", AmountToString(li.Ingredient.MeasureOriginal.Amount), li.Ingredient.MeasureOriginal.Name, li.Ingredient.Name)
+		s += fmt.Sprintf("%s %s %s\n", AmountToString(li.Ingredient.Measure.Amount), li.Ingredient.Measure.Name, li.Ingredient.Name)
 	}
 	return s
 }
@@ -394,7 +405,7 @@ func (lineInfo *LineInfo) getTotalAmount() (err error) {
 	if totalAmount == 0 {
 		err = fmt.Errorf("no amount found")
 	} else {
-		lineInfo.Ingredient.MeasureOriginal.Amount = totalAmount
+		lineInfo.Ingredient.Measure.Amount = totalAmount
 	}
 	return
 }
@@ -410,10 +421,10 @@ func (lineInfo *LineInfo) getIngredient() (err error) {
 
 func (lineInfo *LineInfo) getMeasure() (err error) {
 	if len(lineInfo.MeasureInString) == 0 {
-		lineInfo.Ingredient.MeasureOriginal.Name = "whole"
+		lineInfo.Ingredient.Measure.Name = "whole"
 		return
 	}
-	lineInfo.Ingredient.MeasureOriginal.Name = lineInfo.MeasureInString[0].Word
+	lineInfo.Ingredient.Measure.Name = lineInfo.MeasureInString[0].Word
 	return
 }
 

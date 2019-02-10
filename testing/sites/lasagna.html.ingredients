@@ -3,158 +3,179 @@
   {
    "Name": "sausage",
    "Comment": "sweet italian",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "pound"
+    "Name": "pound",
+    "Cups": 3.2330149679258726
    }
   },
   {
    "Name": "beef",
    "Comment": "lean ground",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.75,
-    "Name": "pound"
+    "Name": "pound",
+    "Cups": 1.5986560150375937
    }
   },
   {
    "Name": "onion",
    "Comment": "minced",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "garlic",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0.0561666
    }
   },
   {
    "Name": "tomatoes",
    "Comment": "crushed",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "can"
+    "Name": "can",
+    "Cups": 1.75
    }
   },
   {
    "Name": "tomato paste",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "cans"
+    "Name": "cans",
+    "Cups": 3.5
    }
   },
   {
    "Name": "tomato sauce",
    "Comment": "canned",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "cans"
+    "Name": "cans",
+    "Cups": 3.5
    }
   },
   {
    "Name": "water",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "sugar",
    "Comment": "white",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "tablespoons"
+    "Name": "tablespoons",
+    "Cups": 0.125
    }
   },
   {
    "Name": "basil leaves",
    "Comment": "dried",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.5,
-    "Name": "teaspoons"
+    "Name": "teaspoons",
+    "Cups": 0.0312495
    }
   },
   {
    "Name": "fennel",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.0104165
    }
   },
   {
    "Name": "italian seasoning",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.020833
    }
   },
   {
    "Name": "salt",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   },
   {
    "Name": "black pepper",
    "Comment": "ground",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.00520825
    }
   },
   {
    "Name": "parsley",
    "Comment": "chopped fresh",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 4,
-    "Name": "tablespoons"
+    "Name": "tablespoons",
+    "Cups": 0.25
    }
   },
   {
    "Name": "lasagna noodles",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 12,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0
    }
   },
   {
    "Name": "ricotta cheese",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 16,
-    "Name": "ounces"
+    "Name": "ounces",
+    "Cups": 1.836404858299595
    }
   },
   {
    "Name": "eggs",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0.25
    }
   },
   {
    "Name": "salt",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.0104165
    }
   },
   {
    "Name": "mozzarella cheese",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.75,
-    "Name": "pound"
+    "Name": "pound",
+    "Cups": 1.7009699999999999
    }
   },
   {
    "Name": "parmesan cheese",
    "Comment": "grated",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.75,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.75
    }
   }
  ]

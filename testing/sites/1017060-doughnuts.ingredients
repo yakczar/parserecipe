@@ -2,62 +2,70 @@
  "Ingredients": [
   {
    "Name": "milk",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.25,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 1.25
    }
   },
   {
    "Name": "yeast",
    "Comment": "active dry",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2.25,
-    "Name": "teaspoons"
+    "Name": "teaspoons",
+    "Cups": 0.04687425
    }
   },
   {
    "Name": "eggs",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0.5
    }
   },
   {
    "Name": "butter",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 8,
-    "Name": "tablespoons"
+    "Name": "tablespoons",
+    "Cups": 0.5
    }
   },
   {
    "Name": "sugar",
    "Comment": "granulated",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.25
    }
   },
   {
    "Name": "salt",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.020833
    }
   },
   {
    "Name": "flour",
    "Comment": "all purpose",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 4.25,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 4.25
    }
   },
   {
    "Name": "oil",
    "Comment": "neutral",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "quarts"
+    "Name": "quarts",
+    "Cups": 8
    }
   }
  ]

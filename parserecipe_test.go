@@ -33,6 +33,8 @@ func TestParse(t *testing.T) {
 		"testing/sites/banana.html",
 		"testing/sites/indianchicken.html",
 		"testing/sites/1014578-four-spice-salmon",
+		"testing/sites/eggnog.html",
+		"testing/sites/pancakes.html",
 	}
 	for _, f := range files {
 		log.Infof("working on %s", f)
@@ -100,4 +102,20 @@ func TestBasic(t *testing.T) {
 	assert.Nil(t, err)
 	r.Parse()
 	fmt.Println(r.PrintIngredientList())
+}
+
+func TestBasic2(t *testing.T) {
+	r, err := NewFromFile("testing/sites/pancakes.html")
+	assert.Nil(t, err)
+	assert.Nil(t, r.Parse())
+	for _, line := range r.Lines {
+		fmt.Println(line.Ingredient.Name, line.Ingredient.Measure)
+		fmt.Println(normalizeIngredient(line.Ingredient.Name, line.Ingredient.Measure.Name, line.Ingredient.Measure.Amount))
+	}
+}
+
+func TestNormalize(t *testing.T) {
+	cups, err := normalizeIngredient("beans", "cans", 2.0)
+	assert.Nil(t, err)
+	assert.Equal(t, 3.5, cups)
 }

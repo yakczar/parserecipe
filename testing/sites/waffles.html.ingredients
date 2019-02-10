@@ -2,60 +2,68 @@
  "Ingredients": [
   {
    "Name": "eggs",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0.5
    }
   },
   {
    "Name": "flour",
    "Comment": "all purpose",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 2
    }
   },
   {
    "Name": "milk",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.75,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 1.75
    }
   },
   {
    "Name": "vegetable oil",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "sugar",
    "Comment": "white",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   },
   {
    "Name": "baking powder",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 4,
-    "Name": "teaspoons"
+    "Name": "teaspoons",
+    "Cups": 0.083332
    }
   },
   {
    "Name": "salt",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.00520825
    }
   },
   {
    "Name": "vanilla",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.0104165
    }
   }
  ]

@@ -3,118 +3,134 @@
   {
    "Name": "sugar",
    "Comment": "granulated",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 2
    }
   },
   {
    "Name": "flour",
    "Comment": "all purpose",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.75,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 1.75
    }
   },
   {
    "Name": "cocoa",
    "Comment": "unsweetened",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.75,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.75
    }
   },
   {
    "Name": "baking powder",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.5,
-    "Name": "teaspoons"
+    "Name": "teaspoons",
+    "Cups": 0.0312495
    }
   },
   {
    "Name": "baking soda",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.5,
-    "Name": "teaspoons"
+    "Name": "teaspoons",
+    "Cups": 0.0312495
    }
   },
   {
    "Name": "salt",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.020833
    }
   },
   {
    "Name": "eggs",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0.5
    }
   },
   {
    "Name": "buttermilk",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 1
    }
   },
   {
    "Name": "oil",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "vanilla",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "teaspoons"
+    "Name": "teaspoons",
+    "Cups": 0.041666
    }
   },
   {
    "Name": "water",
    "Comment": "boiling",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 1
    }
   },
   {
    "Name": "butter",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "cocoa",
    "Comment": "unsweetened",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.6666666666666666,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.6666666666666666
    }
   },
   {
    "Name": "powdered sugar",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 3,
-    "Name": "cups"
+    "Name": "cups",
+    "Cups": 3
    }
   },
   {
    "Name": "milk",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.3333333333333333,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.3333333333333333
    }
   },
   {
    "Name": "vanilla",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.020833
    }
   }
  ]

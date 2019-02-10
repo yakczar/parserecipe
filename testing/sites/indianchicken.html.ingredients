@@ -2,119 +2,135 @@
  "Ingredients": [
   {
    "Name": "chicken thighs",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 6,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0
    }
   },
   {
    "Name": "tomato paste",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "tablespoons"
+    "Name": "tablespoons",
+    "Cups": 0.125
    }
   },
   {
    "Name": "ginger",
    "Comment": "sized piece of fresh",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   },
   {
    "Name": "garlic",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0.0561666
    }
   },
   {
    "Name": "garam masala",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   },
   {
    "Name": "red pepper",
    "Comment": "crushed",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.00520825
    }
   },
   {
    "Name": "paprika",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.0104165
    }
   },
   {
    "Name": "cardamom",
    "Comment": "ground",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.020833
    }
   },
   {
    "Name": "salt",
    "Comment": "kosher",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.0104165
    }
   },
   {
    "Name": "turmeric",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "teaspoon"
+    "Name": "teaspoon",
+    "Cups": 0.0104165
    }
   },
   {
    "Name": "almonds",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "yogurt",
    "Comment": "greek",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.75,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.75
    }
   },
   {
    "Name": "canola oil",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   },
   {
    "Name": "butter",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 3,
-    "Name": "tablespoons"
+    "Name": "tablespoons",
+    "Cups": 0.1875
    }
   },
   {
    "Name": "yellow onion",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0
    }
   },
   {
    "Name": "heavy cream",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.25
    }
   }
  ]

@@ -2,63 +2,71 @@
  "Ingredients": [
   {
    "Name": "pecans",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1.25,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 1.25
    }
   },
   {
    "Name": "eggs",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 4,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 1
    }
   },
   {
    "Name": "corn syrup",
    "Comment": "light",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 1
    }
   },
   {
    "Name": "sugar",
    "Comment": "granulated",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.5,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.5
    }
   },
   {
    "Name": "butter",
    "Comment": "salted",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "tbsp"
+    "Name": "tbsp",
+    "Cups": 0.125
    }
   },
   {
    "Name": "nutmeg",
    "Comment": "ground",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "tsp"
+    "Name": "tsp",
+    "Cups": 0.00520825
    }
   },
   {
    "Name": "vanilla",
    "Comment": "bourbon",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 1,
-    "Name": "tablespoon"
+    "Name": "tablespoon",
+    "Cups": 0.0625
    }
   },
   {
    "Name": "pie shell",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 10,
-    "Name": "whole"
+    "Name": "whole",
+    "Cups": 0
    }
   }
  ]

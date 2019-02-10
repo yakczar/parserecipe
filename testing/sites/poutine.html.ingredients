@@ -2,46 +2,52 @@
  "Ingredients": [
   {
    "Name": "cornstarch",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 3,
-    "Name": "tbsp"
+    "Name": "tbsp",
+    "Cups": 0.1875
    }
   },
   {
    "Name": "water",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 2,
-    "Name": "tbsp"
+    "Name": "tbsp",
+    "Cups": 0.125
    }
   },
   {
    "Name": "butter",
    "Comment": "unsalted",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 6,
-    "Name": "tbsp"
+    "Name": "tbsp",
+    "Cups": 0.375
    }
   },
   {
    "Name": "flour",
    "Comment": "unbleached all purpose",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 0.25,
-    "Name": "cup"
+    "Name": "cup",
+    "Cups": 0.25
    }
   },
   {
    "Name": "beef broth",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 20,
-    "Name": "oz"
+    "Name": "oz",
+    "Cups": 2.5177175843694495
    }
   },
   {
    "Name": "chicken broth",
-   "MeasureOriginal": {
+   "Measure": {
     "Amount": 10,
-    "Name": "oz"
+    "Name": "oz",
+    "Cups": 1.3951525590551181
    }
   }
  ]
