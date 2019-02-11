@@ -17,6 +17,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/bradfitz/slice"
 	"github.com/jaytaylor/html2text"
 	colorable "github.com/mattn/go-colorable"
 	"github.com/sirupsen/logrus"
@@ -721,26 +722,24 @@ func AverageRecipes(rs []*Recipe) (err error) {
 	totalFull := make([]float64, len(rs))
 	// totalPartial := make([]float64, len(rs))
 	rIngredients := make([]map[string]Ingredient, len(rs))
+	ingredientFrequencies := make(map[string]float64)
+	allIngredients := []string{}
 
 	for i := 0; i < len(rs); i++ {
 		rIngredients[i] = make(map[string]Ingredient)
 		for _, ing := range rs[i].Ingredients {
+			if _, ok := ingredientFrequencies[ing.Name]; !ok {
+				ingredientFrequencies[ing.Name] = 0
+				allIngredients = append(allIngredients, ing.Name)
+			}
+			ingredientFrequencies[ing.Name] += 1 / float64(len(rs))
 			totalFull[i] += ing.Measure.Cups
 			rIngredients[i][ing.Name] = ing
 		}
 	}
-
-	ingredientFrequencies := make(map[string]float64)
-	allIngredients := []string{}
-	for i := 0; i < len(rs); i++ {
-		for ing := range rIngredients[i] {
-			if _, ok := ingredientFrequencies[ing]; !ok {
-				ingredientFrequencies[ing] = 0
-				allIngredients = append(allIngredients, ing)
-			}
-			ingredientFrequencies[ing] += 1 / float64(len(rs))
-		}
-	}
+	sort.Sort(sort.Float64Slice(totalFull))
+	log.Debug(totalFull)
+	medianTotal := totalFull[len(totalFull)/2]
 	log.Debugf("ingredientFrequencies: %+v", ingredientFrequencies)
 
 	ingredientRatios := make(map[string]map[string][]float64)
@@ -775,45 +774,56 @@ func AverageRecipes(rs []*Recipe) (err error) {
 	bestRecipeSumSQ := 1e9
 	for iterations := 0; iterations < 100; iterations++ {
 		randPerm := ran.Perm(len(allIngredients))
-		aIngredients := make(map[string]Ingredient, len(allIngredients))
-		aIngredients[allIngredients[randPerm[0]]] = Ingredient{Name: allIngredients[0], Measure: Measure{Amount: 1, Cups: 1}}
+		aIngredients := make(map[string]Ingredient)
+		aIngredients[allIngredients[randPerm[0]]] = Ingredient{
+			Name:      allIngredients[randPerm[0]],
+			Measure:   Measure{Amount: 1, Cups: 1},
+			Frequency: ingredientFrequencies[allIngredients[randPerm[0]]],
+		}
 		// log.Debugf("%s determined to be 1", allIngredients[randPerm[0]])
-		for i := 0; i < len(randPerm); i++ {
-			ing := allIngredients[randPerm[i]]
-			if _, ok := aIngredients[ing]; ok {
-				continue
+		for {
+			if len(aIngredients) == len(randPerm) {
+				break
 			}
-			for ingDone := range aIngredients {
+			for i := 0; i < len(randPerm); i++ {
+				ing := allIngredients[randPerm[i]]
 				if _, ok := aIngredients[ing]; ok {
-					break
-				}
-				var ing1, ing2 string
-				if ingDone == ing {
 					continue
 				}
-				ing1 = ing
-				ing2 = ingDone
-				if ing > ingDone {
-					ing1 = ingDone
-					ing2 = ing
-				}
-				if _, ok := averageRatios[ing1]; ok {
-					if _, ok := averageRatios[ing1][ing2]; ok {
-						amount := averageRatios[ing1][ing2]
-						if ingDone > ing {
-							amount = amount * aIngredients[ingDone].Measure.Cups
-						} else {
-							amount = 1 / amount * aIngredients[ingDone].Measure.Cups
+				for ingDone := range aIngredients {
+					if _, ok := aIngredients[ing]; ok {
+						break
+					}
+					var ing1, ing2 string
+					if ingDone == ing {
+						continue
+					}
+					ing1 = ing
+					ing2 = ingDone
+					if ing > ingDone {
+						ing1 = ingDone
+						ing2 = ing
+					}
+					if _, ok := averageRatios[ing1]; ok {
+						if _, ok := averageRatios[ing1][ing2]; ok {
+							amount := averageRatios[ing1][ing2]
+							if ingDone > ing {
+								amount = amount * aIngredients[ingDone].Measure.Cups
+							} else {
+								amount = 1 / amount * aIngredients[ingDone].Measure.Cups
+							}
+							aIngredients[ing] = Ingredient{
+								Name:      ing,
+								Frequency: ingredientFrequencies[ing],
+								Measure:   Measure{Cups: amount, Amount: amount, Name: "cups"},
+							}
+							// log.Debugf("%s determined from %s to be %2.5f", ing, ingDone, amount)
 						}
-						aIngredients[ing] = Ingredient{
-							Name:    ing,
-							Measure: Measure{Cups: amount, Amount: amount, Name: "cups"},
-						}
-						// log.Debugf("%s determined from %s to be %2.5f", ing, ingDone, amount)
 					}
 				}
 			}
 		}
+
 		rNew := new(Recipe)
 		rNew.Ingredients = make([]Ingredient, 0, len(aIngredients))
 		for ing := range aIngredients {
@@ -824,11 +834,40 @@ func AverageRecipes(rs []*Recipe) (err error) {
 		if ratioComparison < bestRecipeSumSQ {
 			log.Debugf("ratio comparison: %2.3f", ratioComparison)
 			bestRecipeSumSQ = ratioComparison
-			bestRecipe = rNew
+			bestRecipe.Ingredients = make([]Ingredient, 0, len(aIngredients))
+			for ing := range aIngredients {
+				bestRecipe.Ingredients = append(bestRecipe.Ingredients, aIngredients[ing])
+			}
 		}
 	}
 	log.Debugf("found best recipe: %+v", bestRecipe)
+	bestRecipe.Analyze()
 	log.Debugf("comparison: %2.3f", compareRatios(averageRatios, bestRecipe.Ratios, true))
+
+	newRecipeTotal := 0.0
+	for i := range bestRecipe.Ingredients {
+		newRecipeTotal += bestRecipe.Ingredients[i].Measure.Cups
+	}
+	slice.Sort(bestRecipe.Ingredients[:], func(i, j int) bool {
+		return bestRecipe.Ingredients[i].Name < bestRecipe.Ingredients[j].Name
+	})
+	scalingFactor := medianTotal / newRecipeTotal
+	for i := range bestRecipe.Ingredients {
+		bestRecipe.Ingredients[i].Measure.Cups = bestRecipe.Ingredients[i].Measure.Cups * scalingFactor
+		bestRecipe.Ingredients[i].Measure.Amount, bestRecipe.Ingredients[i].Measure.Name = cupsToOther(
+			bestRecipe.Ingredients[i].Measure.Cups,
+			bestRecipe.Ingredients[i].Name,
+		)
+		log.Debugf("%s %s %s (%2.1f%%)",
+			AmountToString(bestRecipe.Ingredients[i].Measure.Amount),
+			bestRecipe.Ingredients[i].Measure.Name,
+			bestRecipe.Ingredients[i].Name,
+			bestRecipe.Ingredients[i].Frequency*100,
+		)
+	}
+	log.Debugf("best recipe scaled to %2.2f cups", medianTotal)
+	log.Debugf("best recipe: %+v", bestRecipe)
+	// log.Debug(bestRecipe.PrintIngredientList())
 
 	// ingredientsInBoth := []string{}
 	// ingredientsInBothMap := make(map[string]struct{})

@@ -31,6 +31,29 @@ var ingredientToCups = map[string]float64{
 	"carrot":  1,
 }
 
+func cupsToOther(cups float64, ingredient string) (amount float64, measure string) {
+	if _, ok := ingredientToCups[ingredient]; ok {
+		measure = "whole"
+		amount = cups / ingredientToCups[ingredient]
+		return
+	}
+	if cups > 0.125 {
+		amount = cups
+		measure = "cup"
+	} else if cups > 0.020833*3 {
+		amount = cups * 16
+		measure = "tbl"
+	} else {
+		amount = cups * 48
+		measure = "tsp"
+	}
+	if math.IsInf(amount, 0) {
+		amount = 0
+	}
+
+	return
+}
+
 // normalizeIngredient will try to normalize the ingredient to 1 cup
 func normalizeIngredient(ingredient, measure string, amount float64) (cups float64, err error) {
 	// convert measure to standard measure
