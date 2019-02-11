@@ -596,6 +596,8 @@ func AmountToString(amount float64) string {
 		bestFractionDiff := 1e9
 		bestFraction := 0.0
 		var fractions = map[float64]string{
+			0:       "",
+			1:       "",
 			1.0 / 2: "1/2",
 			1.0 / 3: "1/3",
 			2.0 / 3: "2/3",
@@ -612,6 +614,9 @@ func AmountToString(amount float64) string {
 				bestFraction = f
 				bestFractionDiff = currentDiff
 			}
+		}
+		if fractions[bestFraction] == "" {
+			return strconv.FormatInt(int64(math.Round(amount)), 10)
 		}
 		if r.i > 0 {
 			return strconv.FormatInt(r.i, 10) + " " + fractions[bestFraction]
@@ -714,10 +719,10 @@ func compareRatios(r1, r2 map[string]map[string]float64, debug ...bool) (sumsq f
 }
 
 // AverageRecipes returns the distance between the recipes
-func AverageRecipes(rs []*Recipe) (err error) {
+func AverageRecipes(rs []*Recipe) (averagedRecipe *Recipe, err error) {
 	if len(rs) < 2 {
-		err = fmt.Errorf("not enough recipes")
-		return err
+		averagedRecipe = rs[0]
+		return
 	}
 	totalFull := make([]float64, len(rs))
 	// totalPartial := make([]float64, len(rs))
@@ -770,7 +775,7 @@ func AverageRecipes(rs []*Recipe) (err error) {
 	// based on the normalizations and the closest one should be taken
 	s := rand.NewSource(time.Now().Unix())
 	ran := rand.New(s) // initialize local pseudorandom generator
-	bestRecipe := new(Recipe)
+	averagedRecipe = new(Recipe)
 	bestRecipeSumSQ := 1e9
 	for iterations := 0; iterations < 100; iterations++ {
 		randPerm := ran.Perm(len(allIngredients))
@@ -834,40 +839,40 @@ func AverageRecipes(rs []*Recipe) (err error) {
 		if ratioComparison < bestRecipeSumSQ {
 			log.Debugf("ratio comparison: %2.3f", ratioComparison)
 			bestRecipeSumSQ = ratioComparison
-			bestRecipe.Ingredients = make([]Ingredient, 0, len(aIngredients))
+			averagedRecipe.Ingredients = make([]Ingredient, 0, len(aIngredients))
 			for ing := range aIngredients {
-				bestRecipe.Ingredients = append(bestRecipe.Ingredients, aIngredients[ing])
+				averagedRecipe.Ingredients = append(averagedRecipe.Ingredients, aIngredients[ing])
 			}
 		}
 	}
-	log.Debugf("found best recipe: %+v", bestRecipe)
-	bestRecipe.Analyze()
-	log.Debugf("comparison: %2.3f", compareRatios(averageRatios, bestRecipe.Ratios, true))
+	averagedRecipe.Analyze()
+	log.Debugf("comparison: %2.3f", compareRatios(averageRatios, averagedRecipe.Ratios, true))
 
 	newRecipeTotal := 0.0
-	for i := range bestRecipe.Ingredients {
-		newRecipeTotal += bestRecipe.Ingredients[i].Measure.Cups
+	for i := range averagedRecipe.Ingredients {
+		newRecipeTotal += averagedRecipe.Ingredients[i].Measure.Cups
 	}
-	slice.Sort(bestRecipe.Ingredients[:], func(i, j int) bool {
-		return bestRecipe.Ingredients[i].Name < bestRecipe.Ingredients[j].Name
+	slice.Sort(averagedRecipe.Ingredients[:], func(i, j int) bool {
+		return averagedRecipe.Ingredients[i].Name < averagedRecipe.Ingredients[j].Name
 	})
 	scalingFactor := medianTotal / newRecipeTotal
-	for i := range bestRecipe.Ingredients {
-		bestRecipe.Ingredients[i].Measure.Cups = bestRecipe.Ingredients[i].Measure.Cups * scalingFactor
-		bestRecipe.Ingredients[i].Measure.Amount, bestRecipe.Ingredients[i].Measure.Name = cupsToOther(
-			bestRecipe.Ingredients[i].Measure.Cups,
-			bestRecipe.Ingredients[i].Name,
+	for i := range averagedRecipe.Ingredients {
+		averagedRecipe.Ingredients[i].Measure.Cups = averagedRecipe.Ingredients[i].Measure.Cups * scalingFactor
+		averagedRecipe.Ingredients[i].Measure.Amount, averagedRecipe.Ingredients[i].Measure.Name = cupsToOther(
+			averagedRecipe.Ingredients[i].Measure.Cups,
+			averagedRecipe.Ingredients[i].Name,
 		)
-		log.Debugf("%s %s %s (%2.1f%%)",
-			AmountToString(bestRecipe.Ingredients[i].Measure.Amount),
-			bestRecipe.Ingredients[i].Measure.Name,
-			bestRecipe.Ingredients[i].Name,
-			bestRecipe.Ingredients[i].Frequency*100,
+		log.Debugf("%s (%2.2f) %s %s (%2.1f%%)",
+			AmountToString(averagedRecipe.Ingredients[i].Measure.Amount),
+			averagedRecipe.Ingredients[i].Measure.Cups,
+			averagedRecipe.Ingredients[i].Measure.Name,
+			averagedRecipe.Ingredients[i].Name,
+			averagedRecipe.Ingredients[i].Frequency*100,
 		)
 	}
 	log.Debugf("best recipe scaled to %2.2f cups", medianTotal)
-	log.Debugf("best recipe: %+v", bestRecipe)
-	// log.Debug(bestRecipe.PrintIngredientList())
+	log.Debugf("averagedRecipe: %+v", averagedRecipe)
+	// log.Debug(averagedRecipe.PrintIngredientList())
 
 	// ingredientsInBoth := []string{}
 	// ingredientsInBothMap := make(map[string]struct{})
