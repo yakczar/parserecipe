@@ -34,7 +34,7 @@ var ingredientToCups = map[string]float64{
 func cupsToOther(cups float64, ingredient string) (amount float64, measure string) {
 	if _, ok := ingredientToCups[ingredient]; ok {
 		measure = "whole"
-		amount = cups / ingredientToCups[ingredient]
+		amount = math.Round(cups / ingredientToCups[ingredient])
 		return
 	}
 	if cups > 0.125 {

@@ -14,6 +14,10 @@ go get github.com/schollz/parserecipe
 
 ## Usage
 
+### Recipe extraction 
+
+Firstly, you can parse the ingredients and directions from any website. For instance here's one I found on the [JoyFoodSunshine](https://joyfoodsunshine.com/the-most-amazing-chocolate-chip-cookies/):
+
 ```go
 r, _ := NewFromURL("https://joyfoodsunshine.com/the-most-amazing-chocolate-chip-cookies/")
 r.Parse()
@@ -28,6 +32,46 @@ fmt.Println(r.PrintIngredientList())
 // 1/2 tsp baking powder
 // 1 tsp salt
 // 2 cups chocolate
+
+fmt.Println(r.PrintDirections())
+// 1) Preheat oven to 375 degrees F. Line a baking pan with parchment paper and set aside.
+// 2) In a separate bowl mix flour, baking soda, salt, baking powder. Set aside.
+// 3) Cream together butter and sugars until combined.
+// 4) Beat in eggs and vanilla until fluffy.
+// 5) Mix in the dry ingredients until combined.
+// 6) Add 12 oz package of chocolate chips and mix well.
+// 7) Roll 3 TBS of dough at a time into balls and place them evenly spaced on your prepared cookie sheets. (alternately, use a small cookie scoop to make your cookies)!
+// 8) Bake in preheated oven for approximately 8-10 minutes. Take them out when they are just *BARELY* starting to turn brown.
+// 9) Let them sit on the baking pan for 2 minutes before removing to cooling rack.
+```
+
+### Recipe averaging
+
+If you extract multiple recipes, you can even average them together. Printing the ingredient list will show percentages, indicating the percentage of recipes that use those ingredients. Here's an example which parses three random pancake recipes and averages them together.
+
+```go
+recipes := []string{
+    "https://www.graceandgoodeats.com/best-ever-pancake-recipe/",
+    "https://cafedelites.com/best-fluffy-pancakes/",
+    "https://www.allrecipes.com/recipe/21014/good-old-fashioned-pancakes/",
+}
+r := make([]*Recipe, len(recipes))
+for i := 0; i < len(recipes); i++ {
+    r[i], _ = NewFromURL(recipes[i])
+    r[i].Parse()
+    r[i].Analyze()
+}
+averageRecipe, _ := AverageRecipes(r)
+fmt.Println(averageRecipe.PrintIngredientList())
+// 1/8 cup baking powder (100.0%)
+// 3/8 tsp baking soda (33.3%)
+// 3/8 cup butter (100.0%)
+// 2 whole eggs (100.0%)
+// 3 1/6 cup flour (100.0%)
+// 2 1/2 cup milk (100.0%)
+// 1 1/8 tsp salt (100.0%)
+// 1/4 cup sugar (100.0%)
+// 1 tbl vanilla (33.3%)
 ```
 
 ## Develop

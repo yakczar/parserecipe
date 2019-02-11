@@ -458,8 +458,20 @@ func (r *Recipe) ConvertIngredients() (err error) {
 
 func (r *Recipe) PrintIngredientList() string {
 	s := ""
-	for _, li := range r.Lines {
-		s += fmt.Sprintf("%s %s %s\n", AmountToString(li.Ingredient.Measure.Amount), li.Ingredient.Measure.Name, li.Ingredient.Name)
+	for _, ing := range r.Ingredients {
+		if ing.Frequency > 0 {
+			s += fmt.Sprintf("%s %s %s (%2.1f%%)\n", AmountToString(ing.Measure.Amount), ing.Measure.Name, ing.Name, 100*ing.Frequency)
+		} else {
+			s += fmt.Sprintf("%s %s %s\n", AmountToString(ing.Measure.Amount), ing.Measure.Name, ing.Name)
+		}
+	}
+	return s
+}
+
+func (r *Recipe) PrintDirections() string {
+	s := ""
+	for i, d := range r.Directions {
+		s += fmt.Sprintf("%d) %s\n", i+1, d)
 	}
 	return s
 }
@@ -873,6 +885,7 @@ func AverageRecipes(rs []*Recipe) (averagedRecipe *Recipe, err error) {
 	}
 	log.Debugf("best recipe scaled to %2.2f cups", medianTotal)
 	log.Debugf("averagedRecipe: %+v", averagedRecipe)
+	log.Debug(averagedRecipe.PrintIngredientList())
 	// log.Debug(averagedRecipe.PrintIngredientList())
 
 	// ingredientsInBoth := []string{}

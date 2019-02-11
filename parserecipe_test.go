@@ -99,11 +99,12 @@ func TestAmountToString(t *testing.T) {
 	assert.Equal(t, "1/2", AmountToString(0.5))
 }
 
-func TestBasic(t *testing.T) {
+func TestBasicExample(t *testing.T) {
 	r, err := NewFromURL("https://joyfoodsunshine.com/the-most-amazing-chocolate-chip-cookies/")
-	assert.Nil(t, err)
 	r.Parse()
 	fmt.Println(r.PrintIngredientList())
+	fmt.Println(r.PrintDirections())
+	assert.Nil(t, err)
 }
 
 func TestBasic2(t *testing.T) {
@@ -135,4 +136,21 @@ func TestAnalyze(t *testing.T) {
 
 	log.SetLevel(logrus.DebugLevel)
 	AverageRecipes(r[0:3])
+}
+
+func TestAverage(t *testing.T) {
+	recipes := []string{
+		"https://www.graceandgoodeats.com/best-ever-pancake-recipe/",
+		"https://cafedelites.com/best-fluffy-pancakes/",
+		"https://www.allrecipes.com/recipe/21014/good-old-fashioned-pancakes/",
+	}
+	r := make([]*Recipe, len(recipes))
+	for i := 0; i < len(recipes); i++ {
+		r[i], _ = NewFromURL(recipes[i])
+		r[i].Parse()
+		r[i].Analyze()
+	}
+	averageRecipe, _ := AverageRecipes(r)
+	fmt.Println(averageRecipe.PrintIngredientList())
+	assert.Contains(t, averageRecipe.PrintIngredientList(), "milk")
 }
