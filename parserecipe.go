@@ -17,7 +17,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bradfitz/slice"
 	"github.com/jaytaylor/html2text"
 	colorable "github.com/mattn/go-colorable"
 	"github.com/sirupsen/logrus"
@@ -895,7 +894,7 @@ func AverageRecipes(rs []*Recipe) (averagedRecipe *Recipe, err error) {
 	for i := range averagedRecipe.Ingredients {
 		newRecipeTotal += averagedRecipe.Ingredients[i].Measure.Cups
 	}
-	slice.Sort(averagedRecipe.Ingredients[:], func(i, j int) bool {
+	sort.Slice(averagedRecipe.Ingredients[:], func(i, j int) bool {
 		return averagedRecipe.Ingredients[i].Name < averagedRecipe.Ingredients[j].Name
 	})
 	scalingFactor := medianTotal / newRecipeTotal
