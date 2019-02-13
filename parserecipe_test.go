@@ -151,6 +151,7 @@ func TestAverage(t *testing.T) {
 		r[i].Analyze()
 	}
 	averageRecipe, _ := AverageRecipes(r)
+	fmt.Println("\n\nAverage recipe:")
 	fmt.Println(averageRecipe.PrintIngredientList())
 	assert.Contains(t, averageRecipe.PrintIngredientList(), "milk")
 }

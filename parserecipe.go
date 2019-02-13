@@ -790,7 +790,7 @@ func AverageRecipes(rs []*Recipe) (averagedRecipe *Recipe, err error) {
 	ran := rand.New(s) // initialize local pseudorandom generator
 	averagedRecipe = new(Recipe)
 	bestRecipeSumSQ := 1e9
-	for iterations := 0; iterations < 100; iterations++ {
+	for iterations := 0; iterations < 1000; iterations++ {
 		randPerm := ran.Perm(len(allIngredients))
 		aIngredients := make(map[string]Ingredient)
 		aIngredients[allIngredients[randPerm[0]]] = Ingredient{
