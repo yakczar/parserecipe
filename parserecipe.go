@@ -731,30 +731,43 @@ func compareRatios(r1, r2 map[string]map[string]float64, debug ...bool) (sumsq f
 }
 
 func DistanceBetween(r1, r2 *Recipe) (distance float64) {
-	r1IngredientMap := make(map[string]Ingredient)
-	r2IngredientMap := make(map[string]Ingredient)
-	for _, ing := range r1.Ingredients {
-		r1IngredientMap[ing.Name] = ing
-	}
-	for _, ing := range r2.Ingredients {
-		r2IngredientMap[ing.Name] = ing
-	}
-
-	rAvg, _ := AverageRecipes([]*Recipe{r1, r2})
-	rAvgMap := make(map[string]Ingredient)
-	avgTotal := 0.0
-	for _, ing := range rAvg.Ingredients {
-		rAvgMap[ing.Name] = ing
-		avgTotal += ing.Measure.Cups
-	}
-
-	for ing := range r1IngredientMap {
-		if _, ok := rAvgMap[ing]; !ok {
-			continue
+	rs := [2]*Recipe{r1, r2}
+	rsMap := make([]map[string]Ingredient, 3) // 3rd is common map
+	fullTotal := [2]float64{0, 0}
+	for i := range rs {
+		rsMap[i] = make(map[string]Ingredient)
+		for _, ing := range rs[i].Ingredients {
+			rsMap[i][ing.Name] = ing
+			fullTotal[i] += ing.Measure.Cups
 		}
-		log.Debugf("r1 %s +(%2.3f-%2.3f)", ing, r1IngredientMap[ing].Measure.Cups, rAvgMap[ing].Measure.Cups)
 	}
-	fmt.Println(rAvg.PrintIngredientList())
+	// load common map
+	rsMap[2] = make(map[string]Ingredient)
+	for ing := range rsMap[0] {
+		if _, ok := rsMap[1][ing]; ok {
+			rsMap[2][ing] = Ingredient{}
+		}
+	}
+
+	partialTotal := [2]float64{0, 0}
+	for ing := range rsMap[2] {
+		partialTotal[0] += rsMap[0][ing].Measure.Cups
+		partialTotal[1] += rsMap[1][ing].Measure.Cups
+	}
+
+	// compare partial normalized
+	for ing := range rsMap[2] {
+		log.Debugf("%s %2.3f - %2.3f", ing, rsMap[0][ing].Measure.Cups/partialTotal[0], rsMap[1][ing].Measure.Cups/partialTotal[1])
+		distance += math.Abs(rsMap[0][ing].Measure.Cups/partialTotal[0] - rsMap[1][ing].Measure.Cups/partialTotal[1])
+	}
+	for i := range rs {
+		for ing := range rsMap[i] {
+			if _, ok := rsMap[2][ing]; !ok {
+				log.Debugf("%d %s %2.3f", i, ing, rsMap[i][ing].Measure.Cups/fullTotal[i])
+				distance += rsMap[i][ing].Measure.Cups / fullTotal[i]
+			}
+		}
+	}
 	return
 }
 

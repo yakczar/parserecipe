@@ -157,16 +157,38 @@ func TestAverage(t *testing.T) {
 }
 
 func TestDistanceBetween(t *testing.T) {
+	log.SetLevel(logrus.ErrorLevel)
 	files := []string{
+		"testing/sites/lasagna.html",
+		"testing/sites/chocolatecake.html",
+		"testing/sites/macandcheese.html",
+		"testing/sites/granola-recipe-1939521",
+		"testing/sites/1017060-doughnuts",
+		"testing/sites/poutine.html",
+		"testing/sites/waffles.html",
+		"testing/sites/refriedbeans.html",
+		"testing/sites/pecans.html",
+		"testing/sites/banana.html",
+		"testing/sites/indianchicken.html",
+		"testing/sites/1014578-four-spice-salmon",
+		"testing/sites/eggnog.html",
+		"testing/sites/pancakes.html",
 		"testing/sites/pancakes2.html",
 		"testing/sites/pancakes3.html",
 	}
-	var 
-	for _, f := range files {
-		log.Infof("working on %s", f)
-		r, err := NewFromFile(f)
-		assert.Nil(t, err)
-		err = r.Parse()
-		assert.Nil(t, err)
+	r := make([]*Recipe, len(files))
+	for i := 0; i < len(files); i++ {
+		r[i], _ = NewFromFile(files[i])
+		r[i].Parse()
+		r[i].Analyze()
+	}
+
+	for i := 0; i < len(files); i++ {
+		for j := 0; j < len(files); j++ {
+			if j <= i {
+				continue
+			}
+			fmt.Printf("%s %s: %2.4f\n", files[i], files[j], DistanceBetween(r[i], r[j]))
+		}
 	}
 }
