@@ -155,3 +155,18 @@ func TestAverage(t *testing.T) {
 	fmt.Println(averageRecipe.PrintIngredientList())
 	assert.Contains(t, averageRecipe.PrintIngredientList(), "milk")
 }
+
+func TestDistanceBetween(t *testing.T) {
+	files := []string{
+		"testing/sites/pancakes2.html",
+		"testing/sites/pancakes3.html",
+	}
+	var 
+	for _, f := range files {
+		log.Infof("working on %s", f)
+		r, err := NewFromFile(f)
+		assert.Nil(t, err)
+		err = r.Parse()
+		assert.Nil(t, err)
+	}
+}

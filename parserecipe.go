@@ -742,19 +742,17 @@ func DistanceBetween(r1, r2 *Recipe) (distance float64) {
 
 	rAvg, _ := AverageRecipes([]*Recipe{r1, r2})
 	rAvgMap := make(map[string]Ingredient)
+	avgTotal := 0.0
 	for _, ing := range rAvg.Ingredients {
 		rAvgMap[ing.Name] = ing
+		avgTotal += ing.Measure.Cups
 	}
 
-	totalSumError := 0.0
 	for ing := range r1IngredientMap {
-		if _, ok := rAvgMap[ing]; ok {
-			totalSumError += math.Abs(rAvgMap[ing].Measure.Cups - r1IngredientMap[ing].Measure.Cups)
-			log.Debugf("r1 %s +(%2.3f-%2.3f)", ing, r1IngredientMap[ing].Measure.Cups, rAvgMap[ing].Measure.Cups)
-		} else {
-			totalSumError += r1IngredientMap[ing].Measure.Cups
-			log.Debugf("r1 %s +(%2.3f)", ing, r1IngredientMap[ing].Measure.Cups)
+		if _, ok := rAvgMap[ing]; !ok {
+			continue
 		}
+		log.Debugf("r1 %s +(%2.3f-%2.3f)", ing, r1IngredientMap[ing].Measure.Cups, rAvgMap[ing].Measure.Cups)
 	}
 	fmt.Println(rAvg.PrintIngredientList())
 	return
