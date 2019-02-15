@@ -18,6 +18,14 @@ func BenchmarkParse(b *testing.B) {
 		r.Parse()
 	}
 }
+func BenchmarkAnalyze(b *testing.B) {
+	log.SetLevel(logrus.ErrorLevel)
+	r, _ := NewFromFile("testing/sites/lasagna.html")
+	r.Parse()
+	for n := 0; n < b.N; n++ {
+		r.Analyze()
+	}
+}
 
 func TestParse(t *testing.T) {
 	files := []string{
@@ -82,7 +90,7 @@ func TestGetIngredientsInString(t *testing.T) {
 	assert.Equal(t, 1, len(wpm))
 	assert.Equal(t, "cup", wpm[0].Word)
 
-	fmt.Println(GetOtherInBetweenPositions(line, wpm[0], wpi[0]))
+	fmt.Println(getOtherInBetweenPositions(line, wpm[0], wpi[0]))
 }
 
 func TestTopHat(t *testing.T) {
@@ -188,7 +196,7 @@ func TestDistanceBetween(t *testing.T) {
 			if j <= i {
 				continue
 			}
-			fmt.Printf("%s %s: %2.4f\n", files[i], files[j], DistanceBetween(r[i], r[j]))
+			fmt.Printf("%s %s: %2.4f\n", files[i], files[j], r[i].DistanceTo(r[j]))
 		}
 	}
 }

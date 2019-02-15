@@ -56,8 +56,8 @@ func getWordPositions(s string, corpus []string) (wordPositions []WordPosition) 
 	return
 }
 
-// GetOtherInBetweenPositions returns the word positions comment string in the ingredients
-func GetOtherInBetweenPositions(s string, pos1, pos2 WordPosition) (other string) {
+// getOtherInBetweenPositions returns the word positions comment string in the ingredients
+func getOtherInBetweenPositions(s string, pos1, pos2 WordPosition) (other string) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error(r)
@@ -244,6 +244,9 @@ func (r *Recipe) parseDirections(lis []LineInfo) (rerr error) {
 // - Percent of other words is less than 50%
 // - Part of list (contains - or *)
 func (r *Recipe) Parse() (rerr error) {
+	if r == nil {
+		r = &Recipe{}
+	}
 	if r.FileContent == "" && r.FileName != "" {
 		var bFile []byte
 		bFile, rerr = ioutil.ReadFile(r.FileName)
@@ -372,7 +375,7 @@ func (r *Recipe) Parse() (rerr error) {
 
 		// get comment
 		if len(lineInfo.MeasureInString) > 0 && len(lineInfo.IngredientsInString) > 0 {
-			lineInfo.Ingredient.Comment = GetOtherInBetweenPositions(lineInfo.Line, lineInfo.MeasureInString[0], lineInfo.IngredientsInString[0])
+			lineInfo.Ingredient.Comment = getOtherInBetweenPositions(lineInfo.Line, lineInfo.MeasureInString[0], lineInfo.IngredientsInString[0])
 		}
 
 		// normalize into cups
@@ -730,7 +733,7 @@ func compareRatios(r1, r2 map[string]map[string]float64, debug ...bool) (sumsq f
 	return sumsq
 }
 
-func DistanceBetween(r1, r2 *Recipe) (distance float64) {
+func (r1 *Recipe) DistanceTo(r2 *Recipe) (distance float64) {
 	rs := [2]*Recipe{r1, r2}
 	rsMap := make([]map[string]Ingredient, 3) // 3rd is common map
 	fullTotal := [2]float64{0, 0}
