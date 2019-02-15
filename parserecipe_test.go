@@ -27,7 +27,7 @@ func BenchmarkAnalyze(b *testing.B) {
 	}
 }
 
-func TestParse(t *testing.T) {
+func TestParseSet(t *testing.T) {
 	files := []string{
 		"testing/sites/lasagna.html",
 		"testing/sites/chocolatecake.html",
@@ -76,15 +76,19 @@ func TestParse(t *testing.T) {
 }
 
 func TestGetIngredientsInString(t *testing.T) {
-	line := SanitizeLine("1/2 cup chilled oil (vegetable or canola oil)")
+	line := SanitizeLine("3 1/2 cup chilled oil or lemony vinegar with lime (vegetable or canola oil)")
 	wpi := GetIngredientsInString(line)
 	assert.Equal(t, "oil", wpi[0].Word)
-	assert.Equal(t, 1, len(wpi))
+	assert.Equal(t, 3, len(wpi))
+	assert.Equal(t, 17, wpi[0].Position)
+	assert.Equal(t, 31, wpi[1].Position)
+	assert.Equal(t, 44, wpi[2].Position)
 	fmt.Println(wpi)
 
 	wp := GetNumbersInString(line)
-	assert.Equal(t, 1, len(wp))
-	assert.Equal(t, "½", wp[0].Word)
+	assert.Equal(t, 2, len(wp))
+	assert.Equal(t, "3", wp[0].Word)
+	assert.Equal(t, "½", wp[1].Word)
 
 	wpm := GetMeasuresInString(line)
 	assert.Equal(t, 1, len(wpm))

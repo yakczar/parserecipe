@@ -16,6 +16,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"github.com/jaytaylor/html2text"
 	colorable "github.com/mattn/go-colorable"
@@ -45,9 +46,10 @@ func getWordPositions(s string, corpus []string) (wordPositions []WordPosition) 
 	for _, ing := range corpus {
 		pos := strings.Index(s, ing)
 		if pos > -1 {
-			s = strings.Replace(s, ing, " ", 1)
+			s = strings.Replace(s, ing, strings.Repeat(" ", utf8.RuneCountInString(ing)), 1)
 			ing = strings.TrimSpace(ing)
 			wordPositions = append(wordPositions, WordPosition{ing, pos})
+			// fmt.Println(s)
 		}
 	}
 	sort.Slice(wordPositions, func(i, j int) bool {
@@ -495,10 +497,10 @@ func (lineInfo *LineInfo) getTotalAmount() (err error) {
 		wps[i].Word = strings.TrimSpace(wps[i].Word)
 		if lastPosition == -1 {
 			totalAmount = convertStringToNumber(wps[i].Word)
-		} else if math.Abs(float64(wps[i].Position-lastPosition)) < 2 {
+		} else if math.Abs(float64(wps[i].Position-lastPosition)) < 6 {
 			totalAmount += convertStringToNumber(wps[i].Word)
 		}
-		lastPosition = wps[i].Position
+		lastPosition = wps[i].Position + len(wps[i].Word)
 	}
 	if totalAmount == 0 && strings.Contains(lineInfo.Line, "whole") {
 		totalAmount = 1
