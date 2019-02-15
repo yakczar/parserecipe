@@ -1,0 +1,59 @@
+{
+ "Ingredients": [
+  {
+   "Name": "apple",
+   "Measure": {
+    "Amount": 1,
+    "Name": "whole",
+    "Cups": 1
+   },
+   "Frequency": 0
+  },
+  {
+   "Name": "apple cider vinegar",
+   "Measure": {
+    "Amount": 0.5,
+    "Name": "cup",
+    "Cups": 0.5
+   },
+   "Frequency": 0
+  },
+  {
+   "Name": "honey",
+   "Measure": {
+    "Amount": 1,
+    "Name": "tablespoon",
+    "Cups": 0.0625
+   },
+   "Frequency": 0
+  },
+  {
+   "Name": "salt",
+   "Comment": "kosher",
+   "Measure": {
+    "Amount": 0.5,
+    "Name": "teaspoon",
+    "Cups": 0.0104165
+   },
+   "Frequency": 0
+  },
+  {
+   "Name": "pepper",
+   "Measure": {
+    "Amount": 5,
+    "Name": "whole",
+    "Cups": 0
+   },
+   "Frequency": 0
+  },
+  {
+   "Name": "apple",
+   "Measure": {
+    "Amount": 5,
+    "Name": "whole",
+    "Cups": 5
+   },
+   "Frequency": 0
+  }
+ ]
+}

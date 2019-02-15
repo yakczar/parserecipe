@@ -120,6 +120,7 @@ func SanitizeLine(s string) string {
 
 	s = strings.Replace(s, " one ", " 1 ", -1)
 	s = strings.Replace(s, " egg ", " eggs ", -1)
+	s = strings.Replace(s, " apples ", " apple ", -1)
 
 	return s
 }

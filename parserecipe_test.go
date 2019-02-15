@@ -45,6 +45,7 @@ func TestParseSet(t *testing.T) {
 		"testing/sites/pancakes.html",
 		"testing/sites/pancakes2.html",
 		"testing/sites/pancakes3.html",
+		"testing/sites/quick-pickled-apple-matchsticks-oxo-chefs-mandoline",
 	}
 	for _, f := range files {
 		log.Infof("working on %s", f)
@@ -71,6 +72,7 @@ func TestParseSet(t *testing.T) {
 			assert.Nil(t, json.Unmarshal(b, &previousDirections))
 			assert.Equal(t, previousDirections, r.Directions)
 		}
+		fmt.Println(r.PrintIngredientList())
 	}
 
 }
