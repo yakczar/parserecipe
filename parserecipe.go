@@ -60,8 +60,12 @@ func getWordPositions(s string, corpus []string) (wordPositions []WordPosition) 
 
 // getOtherInBetweenPositions returns the word positions comment string in the ingredients
 func getOtherInBetweenPositions(s string, pos1, pos2 WordPosition) (other string) {
+	if pos1.Position > pos2.Position {
+		return
+	}
 	defer func() {
 		if r := recover(); r != nil {
+			log.Error(s, pos1, pos2)
 			log.Error(r)
 		}
 	}()
